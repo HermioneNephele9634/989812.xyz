@@ -200,5 +200,105 @@ body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif;background:var(--
       <h3>✏️ 留一句悄悄话</h3>
       <textarea id="whisperInput" placeholder="写给对方的悄悄话..."></textarea>
       <button onclick="writeWhisper()">💌 塞进去</button>
+      </div>
+</div>
+
+<!-- 底部导航 -->
+<div class="nav">
+  <div class="nav-item active" onclick="switchPage('pgChat',this)"><span class="icon">💬</span>聊天</div>
+  <div class="nav-item" onclick="switchPage('pgDiary',this)"><span class="icon">📖</span>日记</div>
+  <div class="nav-item" onclick="switchPage('pgWhisper',this)"><span class="icon">💌</span>悄悄话</div>
+</div>
+
+<!-- 消息操作菜单 -->
+<div class="msg-menu-overlay" id="msgMenuOverlay" onclick="closeMsgMenu()"></div>
+<div class="msg-menu" id="msgMenu">
+  <div class="msg-menu-item" onclick="menuEdit()">✏️ 编辑</div>
+  <div class="msg-menu-item" onclick="menuCopy()">📋 复制</div>
+  <div class="msg-menu-item" id="menuRegenItem" onclick="menuRegen()">🔄 重新生成</div>
+</div>
+
+<!-- 设置弹窗 -->
+<div class="overlay" id="settingsModal">
+  <div class="modal">
+    <h2>⚙️ 设置</h2>
+    <label>API 地址</label>
+    <input id="apiUrl" placeholder="https://api.example.com/v1/chat/completions">
+    <label>API Key</label>
+    <input id="apiKey" type="password" placeholder="sk-...">
+    <label>模型名称</label>
+    <input id="model" value="claude-opus-4-20250514">
+
+    <div class="setting-group">
+      <h3>🎛️ 模型参数</h3>
+      <div class="setting-row">
+        <span class="label">Temperature</span>
+        <input type="range" id="temperature" min="0" max="2" step="0.05" value="0.8" oninput="document.getElementById('tempVal').textContent=this.value">
+        <span class="val" id="tempVal">0.8</span>
+      </div>
+      <div class="setting-row">
+        <span class="label">Top P</span>
+        <input type="range" id="topP" min="0" max="1" step="0.05" value="1" oninput="document.getElementById('topPVal').textContent=this.value>=1?'关闭':this.value">
+        <span class="val" id="topPVal">关闭</span>
+      </div>
+      <div class="setting-row">
+        <span class="label">上下文轮数</span>
+        <input type="number" id="ctxRounds" value="84" min="1" max="200" style="width:70px">
+      </div>
+      <div class="setting-row">
+        <span class="label">思考预算</span>
+        <input type="number" id="thinkBudget" value="32000" min="0" max="128000" style="width:90px">
+      </div>
+      <div class="setting-row">
+        <span class="label">最大 Token</span>
+        <input type="number" id="maxTokens" value="16000" min="256" max="128000" style="width:90px">
+      </div>
+      <div class="setting-row">
+        <span class="label">流式输出</span>
+        <label class="toggle"><input type="checkbox" id="streamToggle" checked><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <h3>🧠 记忆服务</h3>
+      <label>服务地址</label>
+      <input id="memUrl" placeholder="https://memory-api.xxx.workers.dev">
+      <label>密码</label>
+      <input id="memToken" type="password">
+    </div>
+
+    <label style="margin-top:12px">系统提示词</label>
+    <textarea id="sysPrompt" style="height:100px;resize:vertical" placeholder="系统提示词..."></textarea>
+
+    <div class="setting-group">
+      <h3>📦 数据管理</h3>
+      <div class="data-btns">
+        <button onclick="exportAll()">📤 导出备份</button>
+        <button onclick="document.getElementById('importFile').click()">📥 导入数据</button>
+      </div>
+      <input type="file" id="importFile" accept=".json" hidden onchange="importData(event)">
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeAll()">取消</button>
+      <button class="btn-save" onclick="saveSettings()">保存</button>
     </div>
   </div>
+</div>
+
+<!-- 记忆弹窗 -->
+<div class="overlay" id="memModal">
+  <div class="modal">
+    <h2>📝 记忆管理</h2>
+    <div id="memList"><div style="color:#999;font-size:12px">加载中...</div></div>
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn-save" onclick="addMemory()">+ 添加</button>
+      <button class="btn-cancel" onclick="closeAll()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
+

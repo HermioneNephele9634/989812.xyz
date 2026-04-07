@@ -97,7 +97,6 @@ function removeImage() {
   pendingImage = null;
   document.getElementById('imgPreview').classList.remove('show');
 }
-
 // ===== 消息渲染 =====
 function renderMsg(m, idx, save) {
   const chat = document.getElementById('chat');
@@ -225,7 +224,6 @@ function refreshChat() {
     chatHistory.forEach((m, i) => renderMsg(m, i, false));
   }
 }
-
 // ===== 记忆API =====
 async function memFetch(path, opt = {}) {
   const r = await fetch(config.memUrl + path, {
@@ -495,7 +493,6 @@ async function handleStream(body, typing) {
     else if (tapCount === 2) { clearTimeout(tapTimer); tapCount = 0; openMsgMenu(e, finalIdx); }
   });
 }
-
 // ===== 记忆管理UI =====
 async function showMemories() {
   document.getElementById('memModal').classList.add('show');
@@ -753,4 +750,3 @@ async function importData(e) {
   alert('无法识别的文件格式');
   e.target.value = '';
 }
-

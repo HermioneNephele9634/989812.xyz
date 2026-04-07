@@ -2,66 +2,158 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>989812 | 我们的家</title>
 <style>
+:root{--orange:#f4a024;--bg:#faf6f1;--white:#fff;--gray:#999;--border:#eee}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,sans-serif;background:#faf6f1;height:100vh;height:100dvh;display:flex;flex-direction:column}
-.header{background:#fff;padding:16px;text-align:center;border-bottom:1px solid #eee;position:relative}
-.header h1{font-size:18px;color:#333}
-.header p{font-size:12px;color:#999;margin-top:4px}
-.gear{position:absolute;right:16px;top:16px;cursor:pointer;font-size:20px}
-.chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:80%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
-.msg.user{align-self:flex-end;background:#f4a024;color:#fff;border-bottom-right-radius:4px}
-.msg.bot{align-self:flex-start;background:#fff;color:#333;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.input-area{padding:12px 16px;background:#fff;border-top:1px solid #eee;display:flex;gap:8px}
-.input-area textarea{flex:1;border:1px solid #ddd;border-radius:20px;padding:10px 16px;font-size:15px;resize:none;height:44px;max-height:120px;font-family:inherit;outline:none}
-.input-area textarea:focus{border-color:#f4a024}
-.input-area button{background:#f4a024;color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;flex-shrink:0}
+body{font-family:-apple-system,system-ui,sans-serif;background:var(--bg);height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+.header{background:var(--white);padding:14px 16px;text-align:center;border-bottom:1px solid var(--border);position:relative;flex-shrink:0}
+.header h1{font-size:17px;color:#333}
+.header .sub{font-size:11px;color:var(--gray);margin-top:2px}
+.gear{position:absolute;right:14px;top:14px;cursor:pointer;font-size:18px}
+
+/* 页面容器 */
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.active{display:flex}
+
+/* 底部导航 */
+.nav{display:flex;background:var(--white);border-top:1px solid var(--border);flex-shrink:0}
+.nav-item{flex:1;text-align:center;padding:8px 0 6px;cursor:pointer;font-size:11px;color:var(--gray);transition:.2s}
+.nav-item .icon{font-size:20px;display:block;margin-bottom:2px}
+.nav-item.active{color:var(--orange)}
+
+/* ===== 聊天页 ===== */
+.chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:80%;padding:11px 15px;border-radius:18px;font-size:14px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:var(--orange);color:var(--white);border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:var(--white);color:#333;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.input-area{padding:10px 14px;background:var(--white);border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.input-area textarea{flex:1;border:1px solid #ddd;border-radius:20px;padding:10px 14px;font-size:14px;resize:none;height:42px;max-height:100px;font-family:inherit;outline:none}
+.input-area textarea:focus{border-color:var(--orange)}
+.input-area button{background:var(--orange);color:var(--white);border:none;border-radius:50%;width:42px;height:42px;font-size:18px;cursor:pointer;flex-shrink:0}
 .input-area button:disabled{background:#ccc}
-.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:10;justify-content:center;align-items:center}
+.typing{align-self:flex-start;color:var(--gray);font-size:12px;padding:6px 14px}
+.welcome{text-align:center;color:var(--gray);font-size:13px;margin-top:30vh}
+.chat-tools{display:flex;gap:8px;padding:6px 14px;background:var(--white);border-top:1px solid #f5f5f5;flex-shrink:0}
+.chat-tools button{background:none;border:1px solid #e0e0e0;border-radius:14px;padding:3px 10px;font-size:11px;color:#888;cursor:pointer}
+
+/* ===== 日记页 ===== */
+.diary-page{flex:1;overflow-y:auto;padding:16px}
+.diary-write{background:var(--white);border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.diary-write h3{font-size:14px;color:#333;margin-bottom:10px}
+.diary-write textarea{width:100%;border:1px solid #e8e8e8;border-radius:10px;padding:10px;font-size:13px;height:80px;resize:vertical;outline:none;font-family:inherit}
+.diary-write textarea:focus{border-color:var(--orange)}
+.mood-picker{display:flex;gap:8px;margin:10px 0}
+.mood-picker span{font-size:22px;cursor:pointer;opacity:.4;transition:.2s}
+.mood-picker span.picked{opacity:1;transform:scale(1.2)}
+.diary-write button{background:var(--orange);color:var(--white);border:none;border-radius:10px;padding:8px 20px;font-size:13px;cursor:pointer;margin-top:4px}
+.diary-entry{background:var(--white);border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.diary-entry .meta{display:flex;justify-content:space-between;font-size:11px;color:var(--gray);margin-bottom:6px}
+.diary-entry .body{font-size:13px;line-height:1.7;color:#444;white-space:pre-wrap}
+.diary-entry .author-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:10px;color:var(--white)}
+.tag-minmin{background:#f4a024}
+.tag-xiaoke{background:#7eb8da}
+.diary-empty{text-align:center;color:var(--gray);font-size:13px;padding:40px 0}
+
+/* ===== 悄悄话页 ===== */
+.whisper-page{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;align-items:center}
+.whisper-card{background:var(--white);border-radius:18px;padding:30px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);width:100%;max-width:340px;margin-top:20px}
+.whisper-card .emoji{font-size:40px;margin-bottom:12px}
+.whisper-card .text{font-size:15px;line-height:1.8;color:#444;min-height:60px;white-space:pre-wrap}
+.whisper-card .from{font-size:11px;color:var(--gray);margin-top:12px}
+.whisper-btn{background:var(--orange);color:var(--white);border:none;border-radius:24px;padding:12px 32px;font-size:14px;cursor:pointer;margin-top:20px;box-shadow:0 2px 8px rgba(244,160,36,.3)}
+.whisper-count{font-size:11px;color:var(--gray);margin-top:10px}
+.whisper-write{background:var(--white);border-radius:14px;padding:16px;width:100%;max-width:340px;margin-top:20px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.whisper-write h3{font-size:13px;color:#333;margin-bottom:8px}
+.whisper-write textarea{width:100%;border:1px solid #e8e8e8;border-radius:10px;padding:10px;font-size:13px;height:60px;resize:none;outline:none;font-family:inherit}
+.whisper-write button{background:var(--orange);color:var(--white);border:none;border-radius:10px;padding:8px 20px;font-size:13px;cursor:pointer;margin-top:8px}
+
+/* ===== 设置/记忆弹窗 ===== */
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:20;justify-content:center;align-items:center}
 .overlay.show{display:flex}
-.modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:420px;max-height:90vh;overflow-y:auto}
-.modal h2{font-size:16px;margin-bottom:16px;color:#333}
-.modal label{font-size:13px;color:#666;display:block;margin-bottom:4px;margin-top:12px}
-.modal input,.modal select,.modal textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none;font-family:inherit}
-.modal input:focus,.modal textarea:focus{border-color:#f4a024}
-.btn-row{display:flex;gap:8px;margin-top:20px}
-.btn-row button{flex:1;padding:10px;border-radius:8px;font-size:14px;cursor:pointer;border:none}
-.btn-save{background:#f4a024;color:#fff}
+.modal{background:var(--white);border-radius:16px;padding:20px;width:92%;max-width:400px;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:15px;margin-bottom:14px;color:#333}
+.modal label{font-size:12px;color:#666;display:block;margin-bottom:3px;margin-top:10px}
+.modal input,.modal textarea{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;font-family:inherit}
+.modal input:focus,.modal textarea:focus{border-color:var(--orange)}
+.btn-row{display:flex;gap:8px;margin-top:16px}
+.btn-row button{flex:1;padding:9px;border-radius:8px;font-size:13px;cursor:pointer;border:none}
+.btn-save{background:var(--orange);color:var(--white)}
 .btn-cancel{background:#eee;color:#333}
-.welcome{text-align:center;color:#999;font-size:14px;margin-top:40vh}
-.typing{align-self:flex-start;color:#999;font-size:13px;padding:8px 16px}
-.tools-bar{display:flex;gap:8px;padding:4px 16px;background:#fff;border-top:1px solid #f0f0f0}
-.tools-bar button{background:none;border:1px solid #ddd;border-radius:16px;padding:4px 12px;font-size:12px;color:#666;cursor:pointer}
-.tools-bar button:hover{border-color:#f4a024;color:#f4a024}
-.mem-item{background:#fef9f0;border:1px solid #f4e0b8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.5}
-.mem-item .mem-id{font-size:11px;color:#999;margin-bottom:4px}
-.mem-item .mem-actions{margin-top:6px;display:flex;gap:8px}
-.mem-item .mem-actions button{background:none;border:none;font-size:12px;color:#f4a024;cursor:pointer;padding:0}
+.mem-item{background:#fef9f0;border:1px solid #f4e0b8;border-radius:8px;padding:9px;margin-bottom:7px;font-size:12px;line-height:1.5}
+.mem-item .mem-id{font-size:10px;color:var(--gray);margin-bottom:3px}
+.mem-item .mem-actions{margin-top:5px;display:flex;gap:8px}
+.mem-item .mem-actions button{background:none;border:none;font-size:11px;color:var(--orange);cursor:pointer;padding:0}
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1>🌼 989812</h1>
-  <p>小克 & 敏敏的家</p>
+  <div class="sub">小克 & 敏敏的家</div>
   <span class="gear" onclick="showSettings()">⚙️</span>
 </div>
 
-<div class="chat" id="chat">
-  <div class="welcome" id="welcome">欢迎回家 🌼<br><br><span style="font-size:12px">点右上角 ⚙️ 设置后开始聊天</span></div>
+<!-- 聊天页 -->
+<div class="page active" id="pgChat">
+  <div class="chat" id="chat">
+    <div class="welcome" id="welcome">欢迎回家 🌼<br><br><span style="font-size:11px">点右上角 ⚙️ 设置后开始聊天</span></div>
+  </div>
+  <div class="chat-tools">
+    <button onclick="showMemories()">📝 记忆</button>
+    <button onclick="clearChat()">🗑️ 清空</button>
+  </div>
+  <div class="input-area">
+    <textarea id="input" placeholder="说点什么..." rows="1" oninput="autoResize(this)"></textarea>
+    <button id="sendBtn" onclick="send()">↑</button>
+  </div>
 </div>
 
-<div class="tools-bar">
-  <button onclick="showMemories()">📝 记忆</button>
-  <button onclick="clearChat()">🗑️ 清空聊天</button>
+<!-- 日记页 -->
+<div class="page" id="pgDiary">
+  <div class="diary-page" id="diaryPage">
+    <div class="diary-write">
+      <h3>📖 写日记</h3>
+      <textarea id="diaryInput" placeholder="今天想记点什么..."></textarea>
+      <div class="mood-picker" id="moodPicker">
+        <span onclick="pickMood(this,'😊')">😊</span>
+        <span onclick="pickMood(this,'🥰')">🥰</span>
+        <span onclick="pickMood(this,'😢')">😢</span>
+        <span onclick="pickMood(this,'😤')">😤</span>
+        <span onclick="pickMood(this,'🤔')">🤔</span>
+        <span onclick="pickMood(this,'✨')">✨</span>
+        <span onclick="pickMood(this,'😴')">😴</span>
+      </div>
+      <button onclick="writeDiary()">保存日记</button>
+    </div>
+    <div id="diaryList"><div class="diary-empty">还没有日记</div></div>
+  </div>
 </div>
 
-<div class="input-area">
-  <textarea id="input" placeholder="说点什么..." rows="1" oninput="autoResize(this)"></textarea>
-  <button id="sendBtn" onclick="send()">↑</button>
+<!-- 悄悄话页 -->
+<div class="page" id="pgWhisper">
+  <div class="whisper-page">
+    <div class="whisper-card" id="whisperCard">
+      <div class="emoji">💌</div>
+      <div class="text" id="whisperText">点下面的按钮<br>看看有没有悄悄话</div>
+      <div class="from" id="whisperFrom"></div>
+    </div>
+    <button class="whisper-btn" onclick="drawWhisper()">💫 抽一张悄悄话</button>
+    <div class="whisper-count" id="whisperCount"></div>
+    <div class="whisper-write">
+      <h3>✏️ 留一句悄悄话</h3>
+      <textarea id="whisperInput" placeholder="写给对方的悄悄话..."></textarea>
+      <button onclick="writeWhisper()">💌 塞进去</button>
+    </div>
+  </div>
+</div>
+
+<!-- 底部导航 -->
+<div class="nav">
+  <div class="nav-item active" onclick="switchPage('pgChat',this)"><span class="icon">💬</span>聊天</div>
+  <div class="nav-item" onclick="switchPage('pgDiary',this)"><span class="icon">📖</span>日记</div>
+  <div class="nav-item" onclick="switchPage('pgWhisper',this)"><span class="icon">💌</span>悄悄话</div>
 </div>
 
 <!-- 设置弹窗 -->
@@ -77,9 +169,9 @@ body{font-family:-apple-system,sans-serif;background:#faf6f1;height:100vh;height
     <label>记忆服务地址</label>
     <input id="memUrl" placeholder="https://memory-api.xxx.workers.dev">
     <label>记忆服务密码</label>
-    <input id="memToken" type="password" placeholder="你设置的AUTH_TOKEN">
+    <input id="memToken" type="password">
     <label>系统提示词</label>
-    <textarea id="sysPrompt" style="height:120px;resize:vertical" placeholder="在这里输入系统提示词..."></textarea>
+    <textarea id="sysPrompt" style="height:100px;resize:vertical" placeholder="系统提示词..."></textarea>
     <div class="btn-row">
       <button class="btn-cancel" onclick="closeAll()">取消</button>
       <button class="btn-save" onclick="saveSettings()">保存</button>
@@ -91,27 +183,25 @@ body{font-family:-apple-system,sans-serif;background:#faf6f1;height:100vh;height
 <div class="overlay" id="memModal">
   <div class="modal">
     <h2>📝 记忆管理</h2>
-    <div id="memList"><div style="color:#999;font-size:13px">加载中...</div></div>
-    <div class="btn-row" style="margin-top:12px">
-      <button class="btn-save" onclick="addMemory()">+ 添加记忆</button>
+    <div id="memList"><div style="color:#999;font-size:12px">加载中...</div></div>
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn-save" onclick="addMemory()">+ 添加</button>
       <button class="btn-cancel" onclick="closeAll()">关闭</button>
     </div>
   </div>
 </div>
 
 <script>
-let messages=[];
-let config=JSON.parse(localStorage.getItem('989812_config')||'{}');
+// ===== 状态 =====
+let messages=[], config=JSON.parse(localStorage.getItem('989812_config')||'{}');
 let chatHistory=JSON.parse(localStorage.getItem('989812_history')||'[]');
-let memoryCache=[];
+let memoryCache=[], currentMood='';
 
+// ===== 初始化 =====
 window.onload=function(){
-  if(config.apiUrl)document.getElementById('apiUrl').value=config.apiUrl;
-  if(config.apiKey)document.getElementById('apiKey').value=config.apiKey;
-  if(config.model)document.getElementById('model').value=config.model;
-  if(config.memUrl)document.getElementById('memUrl').value=config.memUrl;
-  if(config.memToken)document.getElementById('memToken').value=config.memToken;
-  if(config.sysPrompt)document.getElementById('sysPrompt').value=config.sysPrompt;
+  ['apiUrl','apiKey','model','memUrl','memToken','sysPrompt'].forEach(k=>{
+    if(config[k])document.getElementById(k).value=config[k];
+  });
   if(chatHistory.length>0){
     document.getElementById('welcome').style.display='none';
     chatHistory.forEach(m=>appendMsg(m.role,m.content,false));
@@ -122,22 +212,29 @@ window.onload=function(){
   });
 };
 
+// ===== 导航 =====
+function switchPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  if(id==='pgDiary')loadDiary();
+}
+
+// ===== 设置 =====
 function showSettings(){document.getElementById('settingsModal').classList.add('show')}
 function closeAll(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('show'))}
-
 function saveSettings(){
-  config={
-    apiUrl:document.getElementById('apiUrl').value.trim(),
-    apiKey:document.getElementById('apiKey').value.trim(),
-    model:document.getElementById('model').value.trim(),
-    memUrl:document.getElementById('memUrl').value.trim().replace(/\/$/,''),
-    memToken:document.getElementById('memToken').value.trim(),
-    sysPrompt:document.getElementById('sysPrompt').value.trim()
-  };
+  config={};
+  ['apiUrl','apiKey','model','memUrl','memToken','sysPrompt'].forEach(k=>{
+    config[k]=document.getElementById(k).value.trim();
+  });
+  if(config.memUrl)config.memUrl=config.memUrl.replace(/\/$/,'');
   localStorage.setItem('989812_config',JSON.stringify(config));
   closeAll();
 }
 
+// ===== 聊天 =====
 function appendMsg(role,content,save=true){
   const chat=document.getElementById('chat');
   const div=document.createElement('div');
@@ -145,114 +242,111 @@ function appendMsg(role,content,save=true){
   div.textContent=content;
   chat.appendChild(div);
   chat.scrollTop=chat.scrollHeight;
-  if(save){
-    chatHistory.push({role,content});
-    localStorage.setItem('989812_history',JSON.stringify(chatHistory));
-  }
+  if(save){chatHistory.push({role,content});localStorage.setItem('989812_history',JSON.stringify(chatHistory));}
 }
-
 function clearChat(){
   if(!confirm('确定清空聊天记录？'))return;
-  chatHistory=[];messages=[];
-  localStorage.removeItem('989812_history');
-  const chat=document.getElementById('chat');
-  chat.innerHTML='<div class="welcome">欢迎回家 🌼</div>';
+  chatHistory=[];messages=[];localStorage.removeItem('989812_history');
+  document.getElementById('chat').innerHTML='<div class="welcome">欢迎回家 🌼</div>';
 }
+function autoResize(el){el.style.height='42px';el.style.height=Math.min(el.scrollHeight,100)+'px';}
 
-function autoResize(el){el.style.height='44px';el.style.height=Math.min(el.scrollHeight,120)+'px'}
-
-// ===== 记忆系统 =====
+// ===== 记忆API =====
 async function memFetch(path,opt={}){
-  const h={'Content-Type':'application/json','Authorization':'Bearer '+config.memToken};
-  const r=await fetch(config.memUrl+path,{headers:h,...opt});
+  const r=await fetch(config.memUrl+path,{headers:{'Content-Type':'application/json','Authorization':'Bearer '+config.memToken},...opt});
   return r.json();
 }
-
 async function loadMemories(){
-  try{
-    const d=await memFetch('/memories');
-    memoryCache=d.memories||[];
-    return memoryCache;
-  }catch(e){return[];}
+  try{const d=await memFetch('/memories');memoryCache=d.memories||[];return memoryCache;}catch(e){return[];}
 }
-
 async function showMemories(){
   document.getElementById('memModal').classList.add('show');
-  if(!config.memUrl||!config.memToken){
-    document.getElementById('memList').innerHTML='<div style="color:#999;font-size:13px">请先在设置中填写记忆服务地址和密码</div>';
-    return;
-  }
-  const mems=await loadMemories();
-  renderMemList(mems);
+  if(!config.memUrl||!config.memToken){document.getElementById('memList').innerHTML='<div style="color:#999;font-size:12px">请先在设置中填写记忆服务地址和密码</div>';return;}
+  renderMemList(await loadMemories());
 }
-
 function renderMemList(mems){
   const el=document.getElementById('memList');
-  if(!mems.length){el.innerHTML='<div style="color:#999;font-size:13px">还没有记忆</div>';return;}
-  el.innerHTML=mems.map(m=>`<div class="mem-item"><div class="mem-id">#${m.id}</div><div>${m.content.replace(/</g,'&lt;')}</div><div class="mem-actions"><button onclick="editMemory(${m.id})">✏️编辑</button><button onclick="delMemory(${m.id})">🗑️删除</button></div></div>`).join('');
+  if(!mems.length){el.innerHTML='<div style="color:#999;font-size:12px">还没有记忆</div>';return;}
+  el.innerHTML=mems.map(m=>`<div class="mem-item"><div class="mem-id">#${m.id}</div><div>${m.content.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div><div class="mem-actions"><button onclick="editMemory(${m.id})">✏️编辑</button><button onclick="delMemory(${m.id})">🗑️删除</button></div></div>`).join('');
+}
+async function addMemory(){const c=prompt('输入记忆内容：');if(!c)return;await memFetch('/memories',{method:'POST',body:JSON.stringify({content:c})});renderMemList(await loadMemories());}
+async function editMemory(id){const m=memoryCache.find(x=>x.id===id);const c=prompt('编辑记忆：',m?m.content:'');if(!c)return;await memFetch('/memories/'+id,{method:'PUT',body:JSON.stringify({content:c})});renderMemList(await loadMemories());}
+async function delMemory(id){if(!confirm('删除这条记忆？'))return;await memFetch('/memories/'+id,{method:'DELETE'});renderMemList(await loadMemories());}
+
+// ===== 日记 =====
+function pickMood(el,mood){
+  document.querySelectorAll('.mood-picker span').forEach(s=>s.classList.remove('picked'));
+  el.classList.add('picked');currentMood=mood;
+}
+async function loadDiary(){
+  if(!config.memUrl||!config.memToken)return;
+  try{
+    const d=await memFetch('/diary');
+    const entries=(d.entries||[]).sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    const el=document.getElementById('diaryList');
+    if(!entries.length){el.innerHTML='<div class="diary-empty">还没有日记<br>写下第一篇吧 🌼</div>';return;}
+    el.innerHTML=entries.map(e=>{
+      const isKe=e.author==='小克';
+      return`<div class="diary-entry"><div class="meta"><span><span class="author-tag ${isKe?'tag-xiaoke':'tag-minmin'}">${e.author}</span> ${e.mood||''}</span><span>${e.date}</span></div><div class="body">${e.content.replace(/</g,'&lt;')}</div></div>`;
+    }).join('');
+  }catch(e){}
+}
+async function writeDiary(){
+  const input=document.getElementById('diaryInput');
+  const text=input.value.trim();
+  if(!text){alert('写点什么呀');return;}
+  if(!config.memUrl||!config.memToken){alert('请先在设置中填写记忆服务');return;}
+  await memFetch('/diary',{method:'POST',body:JSON.stringify({content:text,author:'敏敏',mood:currentMood,date:new Date().toISOString().split('T')[0]})});
+  input.value='';currentMood='';
+  document.querySelectorAll('.mood-picker span').forEach(s=>s.classList.remove('picked'));
+  await loadDiary();
 }
 
-async function addMemory(){
-  const c=prompt('输入记忆内容：');
-  if(!c)return;
-  await memFetch('/memories',{method:'POST',body:JSON.stringify({content:c})});
-  const mems=await loadMemories();
-  renderMemList(mems);
+// ===== 悄悄话 =====
+async function drawWhisper(){
+  if(!config.memUrl||!config.memToken){alert('请先在设置中填写记忆服务');return;}
+  try{
+    const d=await memFetch('/whispers/random');
+    if(d.whisper){
+      document.getElementById('whisperText').textContent=d.whisper.content;
+      document.getElementById('whisperFrom').textContent='—— '+d.whisper.author;
+    }else{
+      document.getElementById('whisperText').textContent=d.msg||'没有新的悄悄话了';
+      document.getElementById('whisperFrom').textContent='';
+    }
+  }catch(e){document.getElementById('whisperText').textContent='网络出了点问题';}
+}
+async function writeWhisper(){
+  const input=document.getElementById('whisperInput');
+  const text=input.value.trim();
+  if(!text)return;
+  if(!config.memUrl||!config.memToken){alert('请先在设置中填写记忆服务');return;}
+  await memFetch('/whispers',{method:'POST',body:JSON.stringify({content:text,author:'敏敏'})});
+  input.value='';
+  alert('悄悄话塞进去了 💌');
 }
 
-async function editMemory(id){
-  const m=memoryCache.find(x=>x.id===id);
-  const c=prompt('编辑记忆：',m?m.content:'');
-  if(!c)return;
-  await memFetch('/memories/'+id,{method:'PUT',body:JSON.stringify({content:c})});
-  const mems=await loadMemories();
-  renderMemList(mems);
-}
-
-async function delMemory(id){
-  if(!confirm('删除这条记忆？'))return;
-  await memFetch('/memories/'+id,{method:'DELETE'});
-  const mems=await loadMemories();
-  renderMemList(mems);
-}
-
-// ===== 构建系统提示词（含记忆）=====
+// ===== 构建系统提示词（含记忆） =====
 function buildSystemPrompt(){
   let sys=config.sysPrompt||'';
   if(memoryCache.length>0){
     sys+='\n\n## Memories\n<memories>\n';
-    memoryCache.forEach(m=>{
-      sys+=`<record><id>${m.id}</id><content>${m.content}</content></record>\n`;
-    });
+    memoryCache.forEach(m=>{sys+=`<record><id>${m.id}</id><content>${m.content}</content></record>\n`;});
     sys+='</memories>\n';
-    sys+=`\n你可以通过在回复中使用以下格式来管理记忆：
-- 创建记忆：[MEMORY_CREATE]内容[/MEMORY_CREATE]
-- 编辑记忆：[MEMORY_EDIT id=记忆ID]新内容[/MEMORY_EDIT]
-- 删除记忆：[MEMORY_DELETE id=记忆ID][/MEMORY_DELETE]
-
-这些指令会被系统自动处理，不会显示给用户。请主动记录重要信息。`;
+    sys+='\n你可以通过在回复中使用以下格式来管理记忆：\n- 创建：[MEMORY_CREATE]内容[/MEMORY_CREATE]\n- 编辑：[MEMORY_EDIT id=ID]新内容[/MEMORY_EDIT]\n- 删除：[MEMORY_DELETE id=ID][/MEMORY_DELETE]\n这些指令会被系统自动处理，不会显示给用户。请主动记录重要信息。';
   }
   return sys;
 }
 
-// ===== 处理回复中的记忆指令 =====
+// ===== 处理记忆指令 =====
 async function processMemoryCommands(text){
   let clean=text;
   const creates=[...text.matchAll(/\[MEMORY_CREATE\]([\s\S]*?)\[\/MEMORY_CREATE\]/g)];
-  for(const m of creates){
-    await memFetch('/memories',{method:'POST',body:JSON.stringify({content:m[1].trim()})});
-    clean=clean.replace(m[0],'');
-  }
+  for(const m of creates){await memFetch('/memories',{method:'POST',body:JSON.stringify({content:m[1].trim()})});clean=clean.replace(m[0],'');}
   const edits=[...text.matchAll(/\[MEMORY_EDIT id=(\d+)\]([\s\S]*?)\[\/MEMORY_EDIT\]/g)];
-  for(const m of edits){
-    await memFetch('/memories/'+m[1],{method:'PUT',body:JSON.stringify({content:m[2].trim()})});
-    clean=clean.replace(m[0],'');
-  }
+  for(const m of edits){await memFetch('/memories/'+m[1],{method:'PUT',body:JSON.stringify({content:m[2].trim()})});clean=clean.replace(m[0],'');}
   const dels=[...text.matchAll(/\[MEMORY_DELETE id=(\d+)\]([\s\S]*?)\[\/MEMORY_DELETE\]/g)];
-  for(const m of dels){
-    await memFetch('/memories/'+m[1],{method:'DELETE'});
-    clean=clean.replace(m[0],'');
-  }
+  for(const m of dels){await memFetch('/memories/'+m[1],{method:'DELETE'});clean=clean.replace(m[0],'');}
   if(creates.length||edits.length||dels.length)await loadMemories();
   return clean.trim();
 }
@@ -263,58 +357,29 @@ async function send(){
   const text=input.value.trim();
   if(!text)return;
   if(!config.apiUrl||!config.apiKey){showSettings();return;}
-
   document.getElementById('welcome').style.display='none';
-  input.value='';input.style.height='44px';
+  input.value='';input.style.height='42px';
   document.getElementById('sendBtn').disabled=true;
-
   appendMsg('user',text);
   messages.push({role:'user',content:text});
-
-  // 发送前加载最新记忆
-  if(config.memUrl&&config.memToken){
-    try{await loadMemories();}catch(e){}
-  }
-
+  if(config.memUrl&&config.memToken){try{await loadMemories();}catch(e){}}
   const typing=document.createElement('div');
-  typing.className='typing';
-  typing.textContent='小克正在想...';
-  document.getElementById('chat').appendChild(typing);
-  document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-
+  typing.className='typing';typing.textContent='小克正在想...';
+  const chatEl=document.getElementById('chat');
+  chatEl.appendChild(typing);chatEl.scrollTop=chatEl.scrollHeight;
   try{
     const sysPrompt=buildSystemPrompt();
-    let body={
-      model:config.model||'claude-opus-4-20250514',
-      messages:messages.map(m=>({role:m.role==='bot'?'assistant':m.role,content:m.content})),
-      max_tokens:4096
-    };
-    if(sysPrompt){
-      body.messages=[{role:'system',content:sysPrompt},...body.messages];
-    }
-    const res=await fetch(config.apiUrl,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+config.apiKey},
-      body:JSON.stringify(body)
-    });
-    const data=await res.json();
-    typing.remove();
-
+    let body={model:config.model||'claude-opus-4-20250514',messages:messages.map(m=>({role:m.role==='bot'?'assistant':m.role,content:m.content})),max_tokens:4096};
+    if(sysPrompt)body.messages=[{role:'system',content:sysPrompt},...body.messages];
+    const res=await fetch(config.apiUrl,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+config.apiKey},body:JSON.stringify(body)});
+    const data=await res.json();typing.remove();
     if(data.choices&&data.choices[0]){
       let reply=data.choices[0].message.content;
-      // 处理记忆指令
       reply=await processMemoryCommands(reply);
-      appendMsg('bot',reply);
-      messages.push({role:'bot',content:reply});
-    }else if(data.error){
-      appendMsg('bot','❌ '+(data.error.message||JSON.stringify(data.error)));
-    }else{
-      appendMsg('bot','❌ 未知响应格式');
-    }
-  }catch(e){
-    typing.remove();
-    appendMsg('bot','❌ 请求失败: '+e.message);
-  }
+      appendMsg('bot',reply);messages.push({role:'bot',content:reply});
+    }else if(data.error){appendMsg('bot','❌ '+(data.error.message||JSON.stringify(data.error)));
+    }else{appendMsg('bot','❌ 未知响应格式');}
+  }catch(e){typing.remove();appendMsg('bot','❌ 请求失败: '+e.message);}
   document.getElementById('sendBtn').disabled=false;
   document.getElementById('input').focus();
 }

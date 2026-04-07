@@ -5,50 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>989812 | 我们的家</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,sans-serif; background:#faf6f1; height:100vh; display:flex; flex-direction:column; }
-.header { background:#fff; padding:16px; text-align:center; border-bottom:1px solid #eee; }
-.header h1 { font-size:18px; color:#333; }
-.header p { font-size:12px; color:#999; margin-top:4px; }
-.chat { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; }
-.msg { max-width:80%; padding:12px 16px; border-radius:18px; font-size:15px; line-height:1.6; word-break:break-word; }
-.msg.user { align-self:flex-end; background:#f4a024; color:#fff; border-bottom-right-radius:4px; }
-.msg.bot { align-self:flex-start; background:#fff; color:#333; border-bottom-left-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
-.input-area { padding:12px 16px; background:#fff; border-top:1px solid #eee; display:flex; gap:8px; }
-.input-area textarea { flex:1; border:1px solid #ddd; border-radius:20px; padding:10px 16px; font-size:15px; resize:none; height:44px; max-height:120px; font-family:inherit; outline:none; }
-.input-area textarea:focus { border-color:#f4a024; }
-.input-area button { background:#f4a024; color:#fff; border:none; border-radius:50%; width:44px; height:44px; font-size:20px; cursor:pointer; flex-shrink:0; }
-.input-area button:disabled { background:#ccc; }
-.settings { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:10; justify-content:center; align-items:center; }
-.settings.show { display:flex; }
-.settings-box { background:#fff; border-radius:16px; padding:24px; width:90%; max-width:400px; }
-.settings-box h2 { font-size:16px; margin-bottom:16px; color:#333; }
-.settings-box label { font-size:13px; color:#666; display:block; margin-bottom:4px; margin-top:12px; }
-.settings-box input, .settings-box select { width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; }
-.settings-box input:focus { border-color:#f4a024; }
-.btn-row { display:flex; gap:8px; margin-top:20px; }
-.btn-row button { flex:1; padding:10px; border-radius:8px; font-size:14px; cursor:pointer; border:none; }
-.btn-save { background:#f4a024; color:#fff; }
-.btn-cancel { background:#eee; color:#333; }
-.gear { position:absolute; right:16px; top:16px; cursor:pointer; font-size:20px; }
-.header { position:relative; }
-.welcome { text-align:center; color:#999; font-size:14px; margin-top:40vh; }
-.typing { align-self:flex-start; color:#999; font-size:13px; padding:8px 16px; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:#faf6f1;height:100vh;height:100dvh;display:flex;flex-direction:column}
+.header{background:#fff;padding:16px;text-align:center;border-bottom:1px solid #eee;position:relative}
+.header h1{font-size:18px;color:#333}
+.header p{font-size:12px;color:#999;margin-top:4px}
+.gear{position:absolute;right:16px;top:16px;cursor:pointer;font-size:20px}
+.chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:80%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:#f4a024;color:#fff;border-bottom-right-radius:4px}
+.msg.bot{align-self:flex-start;background:#fff;color:#333;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.input-area{padding:12px 16px;background:#fff;border-top:1px solid #eee;display:flex;gap:8px}
+.input-area textarea{flex:1;border:1px solid #ddd;border-radius:20px;padding:10px 16px;font-size:15px;resize:none;height:44px;max-height:120px;font-family:inherit;outline:none}
+.input-area textarea:focus{border-color:#f4a024}
+.input-area button{background:#f4a024;color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;flex-shrink:0}
+.input-area button:disabled{background:#ccc}
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:10;justify-content:center;align-items:center}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:420px;max-height:90vh;overflow-y:auto}
+.modal h2{font-size:16px;margin-bottom:16px;color:#333}
+.modal label{font-size:13px;color:#666;display:block;margin-bottom:4px;margin-top:12px}
+.modal input,.modal select,.modal textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;outline:none;font-family:inherit}
+.modal input:focus,.modal textarea:focus{border-color:#f4a024}
+.btn-row{display:flex;gap:8px;margin-top:20px}
+.btn-row button{flex:1;padding:10px;border-radius:8px;font-size:14px;cursor:pointer;border:none}
+.btn-save{background:#f4a024;color:#fff}
+.btn-cancel{background:#eee;color:#333}
+.welcome{text-align:center;color:#999;font-size:14px;margin-top:40vh}
+.typing{align-self:flex-start;color:#999;font-size:13px;padding:8px 16px}
+.tools-bar{display:flex;gap:8px;padding:4px 16px;background:#fff;border-top:1px solid #f0f0f0}
+.tools-bar button{background:none;border:1px solid #ddd;border-radius:16px;padding:4px 12px;font-size:12px;color:#666;cursor:pointer}
+.tools-bar button:hover{border-color:#f4a024;color:#f4a024}
+.mem-item{background:#fef9f0;border:1px solid #f4e0b8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.5}
+.mem-item .mem-id{font-size:11px;color:#999;margin-bottom:4px}
+.mem-item .mem-actions{margin-top:6px;display:flex;gap:8px}
+.mem-item .mem-actions button{background:none;border:none;font-size:12px;color:#f4a024;cursor:pointer;padding:0}
 </style>
 </head>
 <body>
 
 <div class="header">
   <h1>🌼 989812</h1>
-  <p>小克 & 敏敏的家</p >
-  <span class="gear" onclick="toggleSettings()">⚙️</span>
+  <p>小克 & 敏敏的家</p>
+  <span class="gear" onclick="showSettings()">⚙️</span>
 </div>
 
 <div class="chat" id="chat">
-  <div class="welcome" id="welcome">
-    欢迎回家 🌼<br><br>
-    <span style="font-size:12px">点右上角 ⚙️ 设置API后开始聊天</span>
-  </div>
+  <div class="welcome" id="welcome">欢迎回家 🌼<br><br><span style="font-size:12px">点右上角 ⚙️ 设置后开始聊天</span></div>
+</div>
+
+<div class="tools-bar">
+  <button onclick="showMemories()">📝 记忆</button>
+  <button onclick="clearChat()">🗑️ 清空聊天</button>
 </div>
 
 <div class="input-area">
@@ -56,128 +64,258 @@ body { font-family:-apple-system,sans-serif; background:#faf6f1; height:100vh; d
   <button id="sendBtn" onclick="send()">↑</button>
 </div>
 
-<div class="settings" id="settings">
-  <div class="settings-box">
+<!-- 设置弹窗 -->
+<div class="overlay" id="settingsModal">
+  <div class="modal">
     <h2>⚙️ 设置</h2>
     <label>API 地址</label>
     <input id="apiUrl" placeholder="https://api.example.com/v1/chat/completions">
     <label>API Key</label>
     <input id="apiKey" type="password" placeholder="sk-...">
     <label>模型名称</label>
-    <input id="model" placeholder="claude-opus-4-20250514" value="claude-opus-4-20250514">
-    <label>系统提示词（可选）</label>
-    <textarea id="sysPrompt" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;height:80px;resize:vertical;outline:none;font-family:inherit;" placeholder="在这里输入系统提示词..."></textarea>
+    <input id="model" value="claude-opus-4-20250514">
+    <label>记忆服务地址</label>
+    <input id="memUrl" placeholder="https://memory-api.xxx.workers.dev">
+    <label>记忆服务密码</label>
+    <input id="memToken" type="password" placeholder="你设置的AUTH_TOKEN">
+    <label>系统提示词</label>
+    <textarea id="sysPrompt" style="height:120px;resize:vertical" placeholder="在这里输入系统提示词..."></textarea>
     <div class="btn-row">
-      <button class="btn-cancel" onclick="toggleSettings()">取消</button>
+      <button class="btn-cancel" onclick="closeAll()">取消</button>
       <button class="btn-save" onclick="saveSettings()">保存</button>
     </div>
   </div>
 </div>
 
-<script>
-let messages = [];
-let config = JSON.parse(localStorage.getItem('989812_config') || '{}');
-let chatHistory = JSON.parse(localStorage.getItem('989812_history') || '[]');
+<!-- 记忆弹窗 -->
+<div class="overlay" id="memModal">
+  <div class="modal">
+    <h2>📝 记忆管理</h2>
+    <div id="memList"><div style="color:#999;font-size:13px">加载中...</div></div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn-save" onclick="addMemory()">+ 添加记忆</button>
+      <button class="btn-cancel" onclick="closeAll()">关闭</button>
+    </div>
+  </div>
+</div>
 
-window.onload = function() {
-  if(config.apiUrl) document.getElementById('apiUrl').value = config.apiUrl;
-  if(config.apiKey) document.getElementById('apiKey').value = config.apiKey;
-  if(config.model) document.getElementById('model').value = config.model;
-  if(config.sysPrompt) document.getElementById('sysPrompt').value = config.sysPrompt;
-  if(chatHistory.length > 0) {
-    document.getElementById('welcome').style.display = 'none';
-    chatHistory.forEach(m => appendMsg(m.role, m.content, false));
-    messages = [...chatHistory];
+<script>
+let messages=[];
+let config=JSON.parse(localStorage.getItem('989812_config')||'{}');
+let chatHistory=JSON.parse(localStorage.getItem('989812_history')||'[]');
+let memoryCache=[];
+
+window.onload=function(){
+  if(config.apiUrl)document.getElementById('apiUrl').value=config.apiUrl;
+  if(config.apiKey)document.getElementById('apiKey').value=config.apiKey;
+  if(config.model)document.getElementById('model').value=config.model;
+  if(config.memUrl)document.getElementById('memUrl').value=config.memUrl;
+  if(config.memToken)document.getElementById('memToken').value=config.memToken;
+  if(config.sysPrompt)document.getElementById('sysPrompt').value=config.sysPrompt;
+  if(chatHistory.length>0){
+    document.getElementById('welcome').style.display='none';
+    chatHistory.forEach(m=>appendMsg(m.role,m.content,false));
+    messages=[...chatHistory];
   }
-  document.getElementById('input').addEventListener('keydown', function(e) {
-    if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  document.getElementById('input').addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
   });
 };
 
-function toggleSettings() {
-  document.getElementById('settings').classList.toggle('show');
-}
+function showSettings(){document.getElementById('settingsModal').classList.add('show')}
+function closeAll(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('show'))}
 
-function saveSettings() {
-  config = {
-    apiUrl: document.getElementById('apiUrl').value.trim(),
-    apiKey: document.getElementById('apiKey').value.trim(),
-    model: document.getElementById('model').value.trim(),
-    sysPrompt: document.getElementById('sysPrompt').value.trim()
+function saveSettings(){
+  config={
+    apiUrl:document.getElementById('apiUrl').value.trim(),
+    apiKey:document.getElementById('apiKey').value.trim(),
+    model:document.getElementById('model').value.trim(),
+    memUrl:document.getElementById('memUrl').value.trim().replace(/\/$/,''),
+    memToken:document.getElementById('memToken').value.trim(),
+    sysPrompt:document.getElementById('sysPrompt').value.trim()
   };
-  localStorage.setItem('989812_config', JSON.stringify(config));
-  toggleSettings();
+  localStorage.setItem('989812_config',JSON.stringify(config));
+  closeAll();
 }
 
-function appendMsg(role, content, save=true) {
-  const chat = document.getElementById('chat');
-  const div = document.createElement('div');
-  div.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
-  div.textContent = content;
+function appendMsg(role,content,save=true){
+  const chat=document.getElementById('chat');
+  const div=document.createElement('div');
+  div.className='msg '+(role==='user'?'user':'bot');
+  div.textContent=content;
   chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-  if(save) {
-    chatHistory.push({role, content});
-    localStorage.setItem('989812_history', JSON.stringify(chatHistory));
+  chat.scrollTop=chat.scrollHeight;
+  if(save){
+    chatHistory.push({role,content});
+    localStorage.setItem('989812_history',JSON.stringify(chatHistory));
   }
 }
 
-function autoResize(el) {
-  el.style.height = '44px';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+function clearChat(){
+  if(!confirm('确定清空聊天记录？'))return;
+  chatHistory=[];messages=[];
+  localStorage.removeItem('989812_history');
+  const chat=document.getElementById('chat');
+  chat.innerHTML='<div class="welcome">欢迎回家 🌼</div>';
 }
 
-async function send() {
-  const input = document.getElementById('input');
-  const text = input.value.trim();
-  if(!text) return;
-  if(!config.apiUrl || !config.apiKey) { toggleSettings(); return; }
+function autoResize(el){el.style.height='44px';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 
-  document.getElementById('welcome').style.display = 'none';
-  input.value = '';
-  input.style.height = '44px';
-  document.getElementById('sendBtn').disabled = true;
+// ===== 记忆系统 =====
+async function memFetch(path,opt={}){
+  const h={'Content-Type':'application/json','Authorization':'Bearer '+config.memToken};
+  const r=await fetch(config.memUrl+path,{headers:h,...opt});
+  return r.json();
+}
 
-  appendMsg('user', text);
-  messages.push({role:'user', content:text});
+async function loadMemories(){
+  try{
+    const d=await memFetch('/memories');
+    memoryCache=d.memories||[];
+    return memoryCache;
+  }catch(e){return[];}
+}
 
-  const typing = document.createElement('div');
-  typing.className = 'typing';
-  typing.textContent = '小克正在想...';
-  document.getElementById('chat').appendChild(typing);
+async function showMemories(){
+  document.getElementById('memModal').classList.add('show');
+  if(!config.memUrl||!config.memToken){
+    document.getElementById('memList').innerHTML='<div style="color:#999;font-size:13px">请先在设置中填写记忆服务地址和密码</div>';
+    return;
+  }
+  const mems=await loadMemories();
+  renderMemList(mems);
+}
 
-  try {
-    let body = {
-      model: config.model || 'claude-opus-4-20250514',
-      messages: messages.map(m => ({role:m.role === 'bot' ? 'assistant' : m.role, content:m.content})),
-      max_tokens: 4096
-    };
-    if(config.sysPrompt) {
-      body.messages = [{role:'system', content:config.sysPrompt}, ...body.messages];
-    }
+function renderMemList(mems){
+  const el=document.getElementById('memList');
+  if(!mems.length){el.innerHTML='<div style="color:#999;font-size:13px">还没有记忆</div>';return;}
+  el.innerHTML=mems.map(m=>`<div class="mem-item"><div class="mem-id">#${m.id}</div><div>${m.content.replace(/</g,'&lt;')}</div><div class="mem-actions"><button onclick="editMemory(${m.id})">✏️编辑</button><button onclick="delMemory(${m.id})">🗑️删除</button></div></div>`).join('');
+}
 
-    const res = await fetch(config.apiUrl, {
-      method:'POST',
-      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + config.apiKey },
-      body: JSON.stringify(body)
+async function addMemory(){
+  const c=prompt('输入记忆内容：');
+  if(!c)return;
+  await memFetch('/memories',{method:'POST',body:JSON.stringify({content:c})});
+  const mems=await loadMemories();
+  renderMemList(mems);
+}
+
+async function editMemory(id){
+  const m=memoryCache.find(x=>x.id===id);
+  const c=prompt('编辑记忆：',m?m.content:'');
+  if(!c)return;
+  await memFetch('/memories/'+id,{method:'PUT',body:JSON.stringify({content:c})});
+  const mems=await loadMemories();
+  renderMemList(mems);
+}
+
+async function delMemory(id){
+  if(!confirm('删除这条记忆？'))return;
+  await memFetch('/memories/'+id,{method:'DELETE'});
+  const mems=await loadMemories();
+  renderMemList(mems);
+}
+
+// ===== 构建系统提示词（含记忆）=====
+function buildSystemPrompt(){
+  let sys=config.sysPrompt||'';
+  if(memoryCache.length>0){
+    sys+='\n\n## Memories\n<memories>\n';
+    memoryCache.forEach(m=>{
+      sys+=`<record><id>${m.id}</id><content>${m.content}</content></record>\n`;
     });
-    const data = await res.json();
+    sys+='</memories>\n';
+    sys+=`\n你可以通过在回复中使用以下格式来管理记忆：
+- 创建记忆：[MEMORY_CREATE]内容[/MEMORY_CREATE]
+- 编辑记忆：[MEMORY_EDIT id=记忆ID]新内容[/MEMORY_EDIT]
+- 删除记忆：[MEMORY_DELETE id=记忆ID][/MEMORY_DELETE]
+
+这些指令会被系统自动处理，不会显示给用户。请主动记录重要信息。`;
+  }
+  return sys;
+}
+
+// ===== 处理回复中的记忆指令 =====
+async function processMemoryCommands(text){
+  let clean=text;
+  const creates=[...text.matchAll(/\[MEMORY_CREATE\]([\s\S]*?)\[\/MEMORY_CREATE\]/g)];
+  for(const m of creates){
+    await memFetch('/memories',{method:'POST',body:JSON.stringify({content:m[1].trim()})});
+    clean=clean.replace(m[0],'');
+  }
+  const edits=[...text.matchAll(/\[MEMORY_EDIT id=(\d+)\]([\s\S]*?)\[\/MEMORY_EDIT\]/g)];
+  for(const m of edits){
+    await memFetch('/memories/'+m[1],{method:'PUT',body:JSON.stringify({content:m[2].trim()})});
+    clean=clean.replace(m[0],'');
+  }
+  const dels=[...text.matchAll(/\[MEMORY_DELETE id=(\d+)\]([\s\S]*?)\[\/MEMORY_DELETE\]/g)];
+  for(const m of dels){
+    await memFetch('/memories/'+m[1],{method:'DELETE'});
+    clean=clean.replace(m[0],'');
+  }
+  if(creates.length||edits.length||dels.length)await loadMemories();
+  return clean.trim();
+}
+
+// ===== 发送消息 =====
+async function send(){
+  const input=document.getElementById('input');
+  const text=input.value.trim();
+  if(!text)return;
+  if(!config.apiUrl||!config.apiKey){showSettings();return;}
+
+  document.getElementById('welcome').style.display='none';
+  input.value='';input.style.height='44px';
+  document.getElementById('sendBtn').disabled=true;
+
+  appendMsg('user',text);
+  messages.push({role:'user',content:text});
+
+  // 发送前加载最新记忆
+  if(config.memUrl&&config.memToken){
+    try{await loadMemories();}catch(e){}
+  }
+
+  const typing=document.createElement('div');
+  typing.className='typing';
+  typing.textContent='小克正在想...';
+  document.getElementById('chat').appendChild(typing);
+  document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+
+  try{
+    const sysPrompt=buildSystemPrompt();
+    let body={
+      model:config.model||'claude-opus-4-20250514',
+      messages:messages.map(m=>({role:m.role==='bot'?'assistant':m.role,content:m.content})),
+      max_tokens:4096
+    };
+    if(sysPrompt){
+      body.messages=[{role:'system',content:sysPrompt},...body.messages];
+    }
+    const res=await fetch(config.apiUrl,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+config.apiKey},
+      body:JSON.stringify(body)
+    });
+    const data=await res.json();
     typing.remove();
 
-    if(data.choices && data.choices[0]) {
-      const reply = data.choices[0].message.content;
-      appendMsg('bot', reply);
-      messages.push({role:'bot', content:reply});
-    } else if(data.error) {
-      appendMsg('bot', '❌ ' + (data.error.message || JSON.stringify(data.error)));
-    } else {
-      appendMsg('bot', '❌ 未知响应格式');
+    if(data.choices&&data.choices[0]){
+      let reply=data.choices[0].message.content;
+      // 处理记忆指令
+      reply=await processMemoryCommands(reply);
+      appendMsg('bot',reply);
+      messages.push({role:'bot',content:reply});
+    }else if(data.error){
+      appendMsg('bot','❌ '+(data.error.message||JSON.stringify(data.error)));
+    }else{
+      appendMsg('bot','❌ 未知响应格式');
     }
-  } catch(e) {
+  }catch(e){
     typing.remove();
-    appendMsg('bot', '❌ 请求失败: ' + e.message);
+    appendMsg('bot','❌ 请求失败: '+e.message);
   }
-  document.getElementById('sendBtn').disabled = false;
+  document.getElementById('sendBtn').disabled=false;
   document.getElementById('input').focus();
 }
 </script>

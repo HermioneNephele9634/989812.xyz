@@ -441,13 +441,6 @@ async function loadMemories() {
 
 // ===== 构建系统提示词 =====
 function buildSystemPrompt() {
-  // 工具说明
-  sys += '\n\n## Tools\n';
-  sys += '你有以下工具可用：\n';
-  sys += '1. 搜索：[TOOL_SEARCH]搜索关键词[/TOOL_SEARCH]\n';
-  sys += '2. 抓取网页：[TOOL_FETCH]https://完整网址[/TOOL_FETCH]\n';
-  sys += '使用工具时，先输出工具指令，系统会自动执行并返回结果，然后你基于结果继续回答。\n';
-  sys += '每次回复最多使用2个工具。搜索结果会包含index和id，引用时用 [citation](index:id) 格式。\n';
   let sys = config.sysPrompt || '';
 
   // 自动替换时间感知
@@ -477,6 +470,15 @@ function buildSystemPrompt() {
     sys += 'level可选：core（核心-身份关系重要信息）、long（长期-重要事件偏好）、short（短期-临时信息）\n';
     sys += '核心记忆需谨慎操作，不可轻易删除。请主动记录重要信息。\n';
   }
+
+  // 工具说明
+  sys += '\n\n## Tools\n';
+  sys += '你有以下工具可用：\n';
+  sys += '1. 搜索：[TOOL_SEARCH]搜索关键词[/TOOL_SEARCH]\n';
+  sys += '2. 抓取网页：[TOOL_FETCH]https://完整网址[/TOOL_FETCH]\n';
+  sys += '使用工具时，先输出工具指令，系统会自动执行并返回结果，然后你基于结果继续回答。\n';
+  sys += '每次回复最多使用2个工具。搜索结果会包含index和id，引用时用 [citation](index:id) 格式。\n';
+
   return sys;
 }
 

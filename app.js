@@ -168,6 +168,14 @@ function scrollBottom() {
 function escHtml(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+function renderMarkdown(text) {
+  try {
+    marked.setOptions({ breaks: true, gfm: true });
+    return marked.parse(text);
+  } catch(e) {
+    return escHtml(text).replace(/\n/g, '<br>');
+  }
+}
 
 // ===== 图片处理 =====
 function onImagePicked(e) {
@@ -238,7 +246,11 @@ function renderMsg(m, idx, save) {
     contentWrap.appendChild(timeEl);
   }
 
+  if(m.role === 'bot') {
+  msgDiv.innerHTML = renderMarkdown(m.content);
+} else {
   msgDiv.textContent = m.content;
+}
 
   // 图片
   if(m.hasImage && m.imageData) {
@@ -703,8 +715,12 @@ async function handleStream(body, typing) {
             thinkBlock.classList.remove('expanded');
             thinkBlock.querySelector('.thinking-header').innerHTML = '<span class="arrow">▶</span> 💭 思维链';
           }
-          contentText += delta.content;
-          msgDiv.textContent = contentText;
+         contentText += delta.content;
+if(contentText.length % 20 === 0 || contentText.length < 50) {
+  msgDiv.innerHTML = renderMarkdown(contentText);
+} else {
+  msgDiv.textContent = contentText;
+}
         }
       } catch(e) {}
     }
@@ -713,7 +729,8 @@ async function handleStream(body, typing) {
 
   // 处理记忆指令
   contentText = await processMemoryCommands(contentText);
-  msgDiv.textContent = contentText;
+msgDiv.innerHTML = renderMarkdown(contentText);
+
 
   const now = new Date();
   const botMsg = { role: 'bot', content: contentText, timestamp: now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' }) };

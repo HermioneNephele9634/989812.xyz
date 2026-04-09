@@ -516,8 +516,33 @@ async function processMemoryCommands(text) {
   }
 
   if(creates.length || edits.length || dels.length) await loadMemories();
+  // 悄悄话
+  const whispers = [...text.matchAll(/\[WHISPER\]([\s\S]*?)\[\/WHISPER\]/g)];
+  for(const m of whispers) {
+    await memFetch('/whispers', {
+      method: 'POST',
+      body: JSON.stringify({ content: m[1].trim(), author: '小克' })
+    });
+    clean = clean.replace(m[0], '');
+  }
+
+  // 日记
+  const diaries = [...text.matchAll(/\[DIARY(?:\s+mood=([^\]]*))?\]([\s\S]*?)\[\/DIARY\]/g)];
+  for(const m of diaries) {
+    await memFetch('/diary', {
+      method: 'POST',
+      body: JSON.stringify({
+        content: m[2].trim(),
+        author: '小克',
+        mood: m[1] || '',
+        date: new Date().toISOString().split('T')[0]
+      })
+    });
+    clean = clean.replace(m[0], '');
+  }
   return clean.trim();
 }
+
 // ===== 处理工具指令 =====
 async function processToolCommands(text) {
   let hasTools = false;

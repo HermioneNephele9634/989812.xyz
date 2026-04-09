@@ -288,6 +288,21 @@ function clearChat() {
   localStorage.removeItem('989812_history');
   document.getElementById('chat').innerHTML = '<div class="welcome" id="welcome">欢迎回家 🌼<br><br><span style="font-size:11px">点右上角 ⚙️ 设置后开始聊天</span></div>';
 }
+function batchDelete() {
+  const total = chatHistory.length;
+  if(!total) { alert('没有消息可删'); return; }
+  const input = prompt('当前共 ' + total + ' 条消息\n\n删除最后N条，请输入数字：\n（输入 0 取消）');
+  if(!input || input === '0') return;
+  const n = parseInt(input);
+  if(isNaN(n) || n <= 0) { alert('请输入有效数字'); return; }
+  if(n >= total) { clearChat(); return; }
+  if(!confirm('确定删除最后 ' + n + ' 条消息？')) return;
+  chatHistory.splice(-n);
+  messages.splice(-n);
+  localStorage.setItem('989812_history', JSON.stringify(chatHistory));
+  refreshChat();
+  alert('已删除 ' + n + ' 条，剩余 ' + chatHistory.length + ' 条');
+}
 
 function refreshChat() {
   const chat = document.getElementById('chat');

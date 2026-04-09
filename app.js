@@ -48,14 +48,15 @@ window.onload = function() {
   if(config.streamToggle != null) document.getElementById('streamToggle').checked = config.streamToggle;
 
   // 头像预览
-  if(config.userAvatar) {
+ if(config.userAvatar) {
     const el = document.getElementById('userAvatarPreview');
-    if(el) el.src = config.userAvatar;
-  }
-  if(config.botAvatar) {
+    if(el) el.innerHTML = '< img src="' + config.userAvatar + '">';
+}
+if(config.botAvatar) {
     const el = document.getElementById('botAvatarPreview');
-    if(el) el.src = config.botAvatar;
-  }
+    if(el) el.innerHTML = '< img src="' + config.botAvatar + '">';
+}
+
 
   // 恢复聊天
   if(chatHistory.length > 0) {
@@ -741,8 +742,19 @@ async function addMemory() {
   const level = prompt('层级（core/long/short）：', 'long') || 'long';
   const tagsStr = prompt('标签（逗号分隔，可留空）：', '') || '';
   const tags = tagsStr ? tagsStr.split(',').map(t => t.trim()).filter(Boolean) : [];
-  await memFetch('/memories', { method: 'POST', body: JSON.stringify({ content: c, level, tags }) });
-  renderMemList(await loadMemories());
+  try {
+    const res = await memFetch('/memories', {
+      method: 'POST',
+      body: JSON.stringify({ content: c, level: level, tags: tags })
+    });
+    if(res.error) {
+      alert('保存失败：' + res.error);
+      return;
+    }
+    renderMemList(await loadMemories());
+  } catch(e) {
+    alert('请求失败：' + e.message);
+  }
 }
 
 async function editMemory(id) {

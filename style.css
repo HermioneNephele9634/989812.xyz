@@ -628,3 +628,45 @@ body {
   overflow-y: auto;
   flex: 1;
 }
+
+/* ===== Markdown渲染 ===== */
+.msg-wrap.bot .msg h1, .msg-wrap.bot .msg h2, .msg-wrap.bot .msg h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 8px 0 4px;
+}
+.msg-wrap.bot .msg p { margin: 4px 0; }
+.msg-wrap.bot .msg ul, .msg-wrap.bot .msg ol {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+.msg-wrap.bot .msg li { margin: 2px 0; }
+.msg-wrap.bot .msg code {
+  background: #f0ebe3;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: monospace;
+}
+.msg-wrap.bot .msg pre {
+  background: #2d2d2d;
+  color: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 6px 0;
+  font-size: 12px;
+}
+.msg-wrap.bot .msg pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+.msg-wrap.bot .msg blockquote {
+  border-left: 3px solid var(--o);
+  padding-left: 10px;
+  color: #888;
+  margin: 6px 0;
+}
+.msg-wrap.bot .msg strong { font-weight: 600; }
+.msg-wrap.bot .msg a { color: var(--o); text-decoration: underline; }

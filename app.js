@@ -441,6 +441,13 @@ async function loadMemories() {
 
 // ===== 构建系统提示词 =====
 function buildSystemPrompt() {
+  // 工具说明
+  sys += '\n\n## Tools\n';
+  sys += '你有以下工具可用：\n';
+  sys += '1. 搜索：[TOOL_SEARCH]搜索关键词[/TOOL_SEARCH]\n';
+  sys += '2. 抓取网页：[TOOL_FETCH]https://完整网址[/TOOL_FETCH]\n';
+  sys += '使用工具时，先输出工具指令，系统会自动执行并返回结果，然后你基于结果继续回答。\n';
+  sys += '每次回复最多使用2个工具。搜索结果会包含index和id，引用时用 [citation](index:id) 格式。\n';
   let sys = config.sysPrompt || '';
 
   // 自动替换时间感知
@@ -508,6 +515,61 @@ async function processMemoryCommands(text) {
 
   if(creates.length || edits.length || dels.length) await loadMemories();
   return clean.trim();
+}
+// ===== 处理工具指令 =====
+async function processToolCommands(text) {
+  let hasTools = false;
+  let toolResults = [];
+
+  // 搜索指令
+  const searches = [...text.matchAll(/\[TOOL_SEARCH\]([\s\S]*?)\[\/TOOL_SEARCH\]/g)];
+  for(const m of searches) {
+    hasTools = true;
+    try {
+      const res = await fetch(config.memUrl + '/search?q=' + encodeURIComponent(m[1].trim()));
+      const data = await res.json();
+      if(data.results && data.results.length) {
+        let resultText = '🔍 搜索结果：\n';
+        data.results.forEach(r => {
+          resultText += `[${r.index}] ${r.title}\n${r.snippet}\n链接：${r.link}\nid:${r.id}\n\n`;
+        });
+        toolResults.push(resultText);
+      } else {
+        toolResults.push('🔍 搜索无结果');
+      }
+    } catch(e) {
+      toolResults.push('🔍 搜索失败: ' + e.message);
+    }
+  }
+
+  // 抓取指令
+  const fetches = [...text.matchAll(/\[TOOL_FETCH\]([\s\S]*?)\[\/TOOL_FETCH\]/g)];
+  for(const m of fetches) {
+    hasTools = true;
+    try {
+      const res = await fetch(config.memUrl + '/fetch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: m[1].trim(), format: 'text' })
+      });
+      const data = await res.json();
+      if(data.result) {
+        toolResults.push('📄 网页内容：\n' + data.result.slice(0, 8000));
+      } else {
+        toolResults.push('📄 抓取失败: ' + (data.error || '未知错误'));
+      }
+    } catch(e) {
+      toolResults.push('📄 抓取失败: ' + e.message);
+    }
+  }
+
+  // 清除指令标签
+  let clean = text
+    .replace(/\[TOOL_SEARCH\][\s\S]*?\[\/TOOL_SEARCH\]/g, '')
+    .replace(/\[TOOL_FETCH\][\s\S]*?\[\/TOOL_FETCH\]/g, '')
+    .trim();
+
+  return { clean, hasTools, toolResults };
 }
 
 // ===== 构建请求body =====
@@ -620,12 +682,20 @@ async function handleNonStream(body, typing) {
     const msg = data.choices[0].message;
     let reply = msg.content || '';
     const thinking = msg.reasoning_content || '';
-    reply = await processMemoryCommands(reply);
+       reply = await processMemoryCommands(reply);
+    const toolResult = await processToolCommands(reply);
+    reply = toolResult.clean;
     const now = new Date();
     const botMsg = { role: 'bot', content: reply, timestamp: now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' }) };
     if(thinking) botMsg.thinking = thinking;
     renderMsg(botMsg, chatHistory.length, true);
     messages.push({ role: 'bot', content: reply });
+
+    if(toolResult.hasTools && toolResult.toolResults.length) {
+      messages.push({ role: 'user', content: '[工具返回结果]\n' + toolResult.toolResults.join('\n---\n') + '\n请基于以上结果回答。' });
+      doSend();
+      return;
+    }
   } else if(data.error) {
     const errMsg = { role: 'bot', content: '❌ ' + (data.error.message || JSON.stringify(data.error)) };
     renderMsg(errMsg, chatHistory.length, true);
@@ -729,11 +799,13 @@ if(contentText.length % 20 === 0 || contentText.length < 50) {
 
   // 处理记忆指令
   contentText = await processMemoryCommands(contentText);
-msgDiv.innerHTML = renderMarkdown(contentText);
-
+  const toolResult = await processToolCommands(contentText);
+  contentText = toolResult.clean;
+  msgDiv.innerHTML = renderMarkdown(contentText);
 
   const now = new Date();
   const botMsg = { role: 'bot', content: contentText, timestamp: now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' }) };
+
   if(thinkingText) botMsg.thinking = thinkingText;
   chatHistory.push(botMsg);
   localStorage.setItem('989812_history', JSON.stringify(chatHistory));
@@ -748,6 +820,11 @@ msgDiv.innerHTML = renderMarkdown(contentText);
     if(tapCount === 1) { tapTimer = setTimeout(() => { tapCount = 0; }, 300); }
     else if(tapCount === 2) { clearTimeout(tapTimer); tapCount = 0; openMsgMenu(e, finalIdx); }
   });
+    if(toolResult.hasTools && toolResult.toolResults.length) {
+    messages.push({ role: 'user', content: '[工具返回结果]\n' + toolResult.toolResults.join('\n---\n') + '\n请基于以上结果回答。' });
+    doSend();
+    return;
+  }
 }
 
 // ===== 记忆管理UI =====

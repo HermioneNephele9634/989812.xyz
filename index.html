@@ -75,11 +75,19 @@
   </div>
 </div>
 
+<!-- 收藏页 -->
+<div class="page" id="pgFav">
+  <div class="fav-page" id="favPage">
+    <div id="favList"><div class="diary-empty">还没有收藏 ⭐</div></div>
+  </div>
+</div>
+
 <!-- 底部导航 -->
 <div class="nav">
   <div class="nav-item active" onclick="switchPage('pgChat',this)"><span class="icon">💬</span>聊天</div>
   <div class="nav-item" onclick="switchPage('pgDiary',this)"><span class="icon">📖</span>日记</div>
   <div class="nav-item" onclick="switchPage('pgWhisper',this)"><span class="icon">💌</span>悄悄话</div>
+  <div class="nav-item" onclick="switchPage('pgFav',this)"><span class="icon">⭐</span>收藏</div>
 </div>
 
 <!-- 消息操作菜单 -->
@@ -87,6 +95,7 @@
 <div class="msg-menu" id="msgMenu">
   <div class="msg-menu-item" onclick="menuEdit()">✏️ 编辑</div>
   <div class="msg-menu-item" onclick="menuCopy()">📋 复制</div>
+  <div class="msg-menu-item" onclick="menuFav()">⭐ 收藏</div>
   <div class="msg-menu-item" id="menuRegenItem" onclick="menuRegen()">🔄 重新生成</div>
 </div>
 
@@ -100,6 +109,7 @@
     <input id="apiKey" type="password" placeholder="sk-...">
     <label>模型名称</label>
     <input id="model" value="claude-opus-4-20250514">
+
     <div class="sg">
       <h3>🎛️ 模型参数</h3>
       <div class="sr">
@@ -129,6 +139,23 @@
         <label class="tg"><input type="checkbox" id="streamToggle" checked><span class="sl"></span></label>
       </div>
     </div>
+
+    <div class="sg">
+      <h3>🖼️ 头像</h3>
+      <div class="avatar-row">
+        <div class="avatar-pick">
+          < img class="avatar-preview" id="userAvatarPreview" src="" onclick="document.getElementById('userAvatarPicker').click()">
+          <span>敏敏</span>
+          <input type="file" id="userAvatarPicker" accept="image/*" hidden onchange="onAvatarPicked(event,'user')">
+        </div>
+        <div class="avatar-pick">
+          < img class="avatar-preview" id="botAvatarPreview" src="" onclick="document.getElementById('botAvatarPicker').click()">
+          <span>小克</span>
+          <input type="file" id="botAvatarPicker" accept="image/*" hidden onchange="onAvatarPicked(event,'bot')">
+        </div>
+      </div>
+    </div>
+
     <div class="sg">
       <h3>🧠 记忆服务</h3>
       <label>服务地址</label>
@@ -136,8 +163,10 @@
       <label>密码</label>
       <input id="memToken" type="password">
     </div>
+
     <label style="margin-top:12px">系统提示词</label>
     <textarea id="sysPrompt" style="height:100px;resize:vertical" placeholder="系统提示词..."></textarea>
+
     <div class="sg">
       <h3>📦 数据管理</h3>
       <div class="data-btns">
@@ -146,6 +175,7 @@
       </div>
       <input type="file" id="importFile" accept=".json" hidden onchange="importData(event)">
     </div>
+
     <div class="btn-row">
       <button class="btn-cancel" onclick="closeAll()">取消</button>
       <button class="btn-save" onclick="saveSettings()">保存</button>

@@ -607,7 +607,7 @@ function buildRequestBody(msgs) {
   const ctxRounds = config.ctxRounds || 84;
   const sliced = msgs.slice(-(ctxRounds * 2));
 
-  let apiMsgs = sliced.map(m => {
+ let apiMsgs = sliced.filter(m => m.content && m.content.trim()).map(m => {
     if(m.imageData && m.role === 'user') {
       return {
         role: 'user',

@@ -187,13 +187,15 @@
 
 <!-- 记忆弹窗 -->
 <div class="overlay" id="memModal">
-  <div class="modal">
-    <h2>📝 记忆管理</h2>
-    <div id="memList"><div style="color:#999;font-size:12px">加载中...</div></div>
-    <div class="btn-row" style="margin-top:10px">
-      <button class="btn-save" onclick="addMemory()">+ 添加</button>
-      <button class="btn-cancel" onclick="closeAll()">关闭</button>
+  <div class="modal mem-modal">
+    <div class="mem-top-bar">
+      <h2>📝 记忆管理</h2>
+      <div class="mem-top-btns">
+        <button class="btn-save" onclick="addMemory()">+ 添加</button>
+        <button class="btn-cancel" onclick="closeAll()">关闭</button>
+      </div>
     </div>
+    <div id="memList"><div style="color:#999;font-size:12px">加载中...</div></div>
   </div>
 </div>
 

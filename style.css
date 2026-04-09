@@ -630,37 +630,47 @@ body {
 }
 
 /* ===== Markdown渲染 ===== */
-.msg-wrap.bot .msg h1, .msg-wrap.bot .msg h2, .msg-wrap.bot .msg h3 {
+.msg-wrap.bot .msg {
+  white-space: normal;
+}
+.msg-wrap.bot .msg h1,
+.msg-wrap.bot .msg h2,
+.msg-wrap.bot .msg h3 {
   font-size: 14px;
   font-weight: 600;
   margin: 8px 0 4px;
 }
 .msg-wrap.bot .msg p { margin: 4px 0; }
-.msg-wrap.bot .msg ul, .msg-wrap.bot .msg ol {
+.msg-wrap.bot .msg ul,
+.msg-wrap.bot .msg ol {
   margin: 4px 0;
   padding-left: 20px;
 }
 .msg-wrap.bot .msg li { margin: 2px 0; }
 .msg-wrap.bot .msg code {
-  background: #f0ebe3;
-  padding: 1px 5px;
-  border-radius: 4px;
+  background: #e8e0d4 !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
   font-size: 12px;
-  font-family: monospace;
+  font-family: 'Courier New', monospace;
+  color: #c7254e;
 }
 .msg-wrap.bot .msg pre {
-  background: #2d2d2d;
-  color: #f0f0f0;
-  padding: 10px;
-  border-radius: 8px;
+  background: #1e1e1e !important;
+  color: #d4d4d4 !important;
+  padding: 12px !important;
+  border-radius: 10px !important;
   overflow-x: auto;
-  margin: 6px 0;
+  margin: 8px 0;
   font-size: 12px;
+  line-height: 1.5;
+  white-space: pre !important;
 }
 .msg-wrap.bot .msg pre code {
-  background: none;
-  padding: 0;
-  color: inherit;
+  background: none !important;
+  padding: 0 !important;
+  color: #d4d4d4 !important;
+  border-radius: 0;
 }
 .msg-wrap.bot .msg blockquote {
   border-left: 3px solid var(--o);
@@ -670,3 +680,8 @@ body {
 }
 .msg-wrap.bot .msg strong { font-weight: 600; }
 .msg-wrap.bot .msg a { color: var(--o); text-decoration: underline; }
+.msg-wrap.bot .msg hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 8px 0;
+}

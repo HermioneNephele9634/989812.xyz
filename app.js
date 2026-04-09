@@ -1005,6 +1005,22 @@ async function writeWhisper() {
   alert('悄悄话塞进去了 💌');
 }
 
+// 小克读取悄悄话
+  const reads = [...text.matchAll(/\[READ_WHISPER\]/g)];
+  for(const m of reads) {
+    try {
+      const r = await memFetch('/whispers/peek');
+      const w = await r.json();
+      if(w.content) {
+        clean = clean.replace(m[0], '💌 「' + w.content + '」—— ' + (w.author || '匿名'));
+      } else {
+        clean = clean.replace(m[0], '💌 悄悄话信箱是空的');
+      }
+    } catch(e) {
+      clean = clean.replace(m[0], '');
+    }
+  }
+
 // ===== 导出备份 =====
 async function exportAll() {
   const data = {

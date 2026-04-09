@@ -207,6 +207,7 @@ function removeImage() {
   pendingImage = null;
   document.getElementById('imgPreview').classList.remove('show');
 }
+
 // ===== 消息渲染（含头像）=====
 function renderMsg(m, idx, save) {
   const chat = document.getElementById('chat');
@@ -543,7 +544,7 @@ async function processMemoryCommands(text) {
     clean = clean.replace(m[0], '');
   }
 
-   // 小克读取悄悄话
+  // 小克读取悄悄话
   const reads = [...text.matchAll(/\[READ_WHISPER\]/g)];
   for(const m of reads) {
     try {

@@ -899,7 +899,7 @@ async function importData(e) {
   let data;
   try { data = JSON.parse(text); } catch(err) { alert('文件格式错误'); return; }
 
-  if(data.version && typeof data.version === 'string' && data.version.startsWith('989812')) {
+ if(data.version && typeof data.version === 'string' && data.version.startsWith('989812')) {
     if(!confirm('导入将覆盖当前数据，确定？')) return;
     if(data.chatHistory) {
       chatHistory = data.chatHistory;

@@ -544,15 +544,20 @@ async function processMemoryCommands(text) {
     clean = clean.replace(m[0], '');
   }
 
-    // 小克读取悄悄话
+      // 小克读取悄悄话
   const reads = [...text.matchAll(/\[READ_WHISPER\]/g)];
   for(const m of reads) {
     try {
-      const w = await memFetch('/whispers/peek');
-      if(w.content) {
-        clean = clean.replace(m[0], '💌 「' + w.content + '」—— ' + (w.author || '匿名'));
+      const w = await memFetch('/whispers');
+      const unread = (w.whispers || []).filter(x => !x.read && x.author !== '小克');
+      if(unread.length > 0) {
+        let whisperText = '';
+        unread.forEach(x => {
+          whisperText += '💌 「' + x.content + '」—— ' + x.author + '\n';
+        });
+        clean = clean.replace(m[0], whisperText.trim());
       } else {
-        clean = clean.replace(m[0], '💌 悄悄话信箱是空的');
+        clean = clean.replace(m[0], '💌 没有新的悄悄话');
       }
     } catch(e) {
       clean = clean.replace(m[0], '');

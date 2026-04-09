@@ -141,10 +141,11 @@ function onAvatarPicked(e, who) {
       const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
       if(who === 'user') {
         config.userAvatar = dataUrl;
-        document.getElementById('userAvatarPreview').src = dataUrl;
+document.getElementById('userAvatarPreview').innerHTML = '< img src="' + dataUrl + '">';
       } else {
         config.botAvatar = dataUrl;
-        document.getElementById('botAvatarPreview').src = dataUrl;
+document.getElementById('botAvatarPreview').innerHTML = '< img src="' + dataUrl + '">';
+
       }
       localStorage.setItem('989812_config', JSON.stringify(config));
     };

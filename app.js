@@ -392,10 +392,24 @@ async function memFetch(path, opt = {}) {
 
 async function loadMemories() {
   try {
-    const d = await memFetch('/memories');
+    if(!config.memUrl || !config.memToken) {
+      alert('调试：memUrl或memToken为空！\nmemUrl: ' + config.memUrl + '\nmemToken: ' + config.memToken);
+      return [];
+    }
+    const r = await fetch(config.memUrl + '/memories', {
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + config.memToken }
+    });
+    const d = await r.json();
+    if(d.error) {
+      alert('调试：API返回错误: ' + d.error);
+      return [];
+    }
     memoryCache = d.memories || [];
     return memoryCache;
-  } catch(e) { return []; }
+  } catch(e) {
+    alert('调试：请求异常: ' + e.message);
+    return [];
+  }
 }
 
 // ===== 构建系统提示词 =====

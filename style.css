@@ -594,3 +594,37 @@ body {
   cursor: pointer;
   padding: 0;
 }
+
+/* ===== 记忆弹窗顶部固定 ===== */
+.mem-modal {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.mem-top-bar {
+  position: sticky;
+  top: 0;
+  background: var(--w);
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--b);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+  border-radius: 16px 16px 0 0;
+  flex-shrink: 0;
+}
+.mem-top-bar h2 { margin: 0; }
+.mem-top-btns { display: flex; gap: 8px; }
+.mem-top-btns button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  border: none;
+}
+.mem-modal #memList {
+  padding: 12px 20px 20px;
+  overflow-y: auto;
+  flex: 1;
+}

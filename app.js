@@ -808,18 +808,25 @@ async function handleStream(body, typing) {
           thinkingText += delta.reasoning_content;
           thinkBlock.querySelector('.thinking-content').textContent = thinkingText;
         }
-        if(delta.content) {
+         if(delta.content) {
           if(!thinkingDone && thinkingText) {
             thinkingDone = true;
             thinkBlock.classList.remove('expanded');
             thinkBlock.querySelector('.thinking-header').innerHTML = '<span class="arrow">▶</span> 💭 思维链';
           }
-         contentText += delta.content;
-if(contentText.length % 20 === 0 || contentText.length < 50) {
-  msgDiv.innerHTML = renderMarkdown(contentText);
-} else {
-  msgDiv.textContent = contentText;
-}
+          contentText += delta.content;
+          let displayText = contentText
+            .replace(/\[WHISPER\][\s\S]*?(\[\/WHISPER\]|$)/g, '')
+            .replace(/\[DIARY[^\]]*\][\s\S]*?(\[\/DIARY\]|$)/g, '')
+            .replace(/\[MEMORY_CREATE[^\]]*\][\s\S]*?(\[\/MEMORY_CREATE\]|$)/g, '')
+            .replace(/\[MEMORY_EDIT[^\]]*\][\s\S]*?(\[\/MEMORY_EDIT\]|$)/g, '')
+            .replace(/\[MEMORY_DELETE[^\]]*\][\s\S]*?(\[\/MEMORY_DELETE\]|$)/g, '')
+            .trim();
+          if(displayText.length % 20 === 0 || displayText.length < 50) {
+            msgDiv.innerHTML = renderMarkdown(displayText);
+          } else {
+            msgDiv.textContent = displayText;
+          }
         }
       } catch(e) {}
     }

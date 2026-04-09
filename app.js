@@ -486,7 +486,7 @@ function buildSystemPrompt() {
 async function processMemoryCommands(text) {
   let clean = text;
 
-  // 创建（支持level和tags）
+  // 创建记忆
   const creates = [...text.matchAll(/\[MEMORY_CREATE(?:\s+level=(\w+))?(?:\s+tags=([^\]]*))?\]([\s\S]*?)\[\/MEMORY_CREATE\]/g)];
   for(const m of creates) {
     const level = m[1] || 'long';
@@ -498,7 +498,7 @@ async function processMemoryCommands(text) {
     clean = clean.replace(m[0], '');
   }
 
-  // 编辑
+  // 编辑记忆
   const edits = [...text.matchAll(/\[MEMORY_EDIT id=(\d+)\]([\s\S]*?)\[\/MEMORY_EDIT\]/g)];
   for(const m of edits) {
     await memFetch('/memories/' + m[1], {
@@ -508,7 +508,7 @@ async function processMemoryCommands(text) {
     clean = clean.replace(m[0], '');
   }
 
-  // 删除
+  // 删除记忆
   const dels = [...text.matchAll(/\[MEMORY_DELETE id=(\d+)\][\s\S]*?\[\/MEMORY_DELETE\]/g)];
   for(const m of dels) {
     await memFetch('/memories/' + m[1], { method: 'DELETE' });
@@ -516,6 +516,7 @@ async function processMemoryCommands(text) {
   }
 
   if(creates.length || edits.length || dels.length) await loadMemories();
+
   // 悄悄话
   const whispers = [...text.matchAll(/\[WHISPER\]([\s\S]*?)\[\/WHISPER\]/g)];
   for(const m of whispers) {
@@ -540,6 +541,7 @@ async function processMemoryCommands(text) {
     });
     clean = clean.replace(m[0], '');
   }
+
   return clean.trim();
 }
 

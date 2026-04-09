@@ -220,6 +220,7 @@ function renderMsg(m, idx, save) {
     const avatar = document.createElement('img');
     avatar.className = 'avatar';
     avatar.src = avatarSrc;
+    avatar.style.cssText = 'width:36px;height:36px;min-width:36px;max-width:36px;min-height:36px;max-height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-top:2px;';
     wrap.appendChild(avatar);
   }
 
@@ -764,6 +765,7 @@ async function handleStream(body, typing) {
     const avatar = document.createElement('img');
     avatar.className = 'avatar';
     avatar.src = config.botAvatar;
+    avatar.style.cssText = 'width:36px;height:36px;min-width:36px;max-width:36px;min-height:36px;max-height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;margin-top:2px;';
     wrap.appendChild(avatar);
   }
 

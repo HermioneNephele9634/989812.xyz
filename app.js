@@ -548,16 +548,11 @@ async function processMemoryCommands(text) {
   const reads = [...text.matchAll(/\[READ_WHISPER\]/g)];
   for(const m of reads) {
     try {
-      const w = await memFetch('/whispers');
-      const unread = (w.whispers || []).filter(x => !x.read && x.author !== '小克');
-      if(unread.length > 0) {
-        let whisperText = '';
-        unread.forEach(x => {
-          whisperText += '💌 「' + x.content + '」—— ' + x.author + '\n';
-        });
-        clean = clean.replace(m[0], whisperText.trim());
+      const w = await memFetch('/whispers/random');
+      if(w.whisper) {
+        clean = clean.replace(m[0], '💌 「' + w.whisper.content + '」—— ' + w.whisper.author);
       } else {
-        clean = clean.replace(m[0], '💌 没有新的悄悄话');
+        clean = clean.replace(m[0], '💌 ' + (w.msg || '没有新的悄悄话'));
       }
     } catch(e) {
       clean = clean.replace(m[0], '');

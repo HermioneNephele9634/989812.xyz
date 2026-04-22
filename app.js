@@ -542,6 +542,7 @@ async function processMemoryCommands(text) {
       })
     });
     clean = clean.replace(m[0], '');
+    await loadDiary();
   }
 
       // 小克读取悄悄话
@@ -980,10 +981,11 @@ function pickMood(el, mood) {
 
 async function loadDiary() {
   if(!config.memUrl || !config.memToken) return;
+  const el = document.getElementById('diaryList');
+  if(!el) return; // 元素不存在就不处理
   try {
     const d = await memFetch('/diary');
     const entries = (d.entries || []).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-    const el = document.getElementById('diaryList');
     if(!entries.length) {
       el.innerHTML = '<div class="diary-empty">还没有日记<br>写下第一篇吧 🌼</div>';
       return;

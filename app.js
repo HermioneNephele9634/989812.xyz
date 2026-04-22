@@ -529,19 +529,20 @@ async function processMemoryCommands(text) {
     clean = clean.replace(m[0], '');
   }
 
-  // 日记
+    // 日记
   const diaries = [...text.matchAll(/\[DIARY(?:\s+mood=([^\]]*))?\]([\s\S]*?)\[\/DIARY\]/g)];
   for(const m of diaries) {
+    const content = m[2].trim();
     await memFetch('/diary', {
       method: 'POST',
       body: JSON.stringify({
-        content: m[2].trim(),
+        content: content,
         author: '小克',
         mood: m[1] || '',
         date: new Date().toISOString().split('T')[0]
       })
     });
-    clean = clean.replace(m[0], '');
+    clean = clean.replace(m[0], '📔 日记已记录：' + content.slice(0, 30) + (content.length > 30 ? '...' : ''));
     await loadDiary();
   }
 

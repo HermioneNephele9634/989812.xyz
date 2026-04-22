@@ -812,6 +812,9 @@ async function handleStream(body, typing) {
   const decoder = new TextDecoder();
   let buffer = '';
 
+ let rafPending = false;
+  let lastMarkdownTime = 0;
+
   while(true) {
     const { done, value } = await reader.read();
     if(done) break;
@@ -830,15 +833,25 @@ async function handleStream(body, typing) {
         if(delta.reasoning_content) {
           if(thinkBlock.style.display === 'none') thinkBlock.style.display = 'block';
           thinkingText += delta.reasoning_content;
-          thinkBlock.querySelector('.thinking-content').textContent = thinkingText;
         }
-         if(delta.content) {
+        if(delta.content) {
           if(!thinkingDone && thinkingText) {
             thinkingDone = true;
             thinkBlock.classList.remove('expanded');
             thinkBlock.querySelector('.thinking-header').innerHTML = '<span class="arrow">▶</span> 💭 思维链';
           }
           contentText += delta.content;
+        }
+      } catch(e) {}
+    }
+
+    if(!rafPending) {
+      rafPending = true;
+      requestAnimationFrame(() => {
+        if(thinkingText) {
+          thinkBlock.querySelector('.thinking-content').textContent = thinkingText;
+        }
+        if(contentText) {
           let displayText = contentText
             .replace(/\[WHISPER\][\s\S]*?(\[\/WHISPER\]|$)/g, '')
             .replace(/\[DIARY[^\]]*\][\s\S]*?(\[\/DIARY\]|$)/g, '')
@@ -846,15 +859,18 @@ async function handleStream(body, typing) {
             .replace(/\[MEMORY_EDIT[^\]]*\][\s\S]*?(\[\/MEMORY_EDIT\]|$)/g, '')
             .replace(/\[MEMORY_DELETE[^\]]*\][\s\S]*?(\[\/MEMORY_DELETE\]|$)/g, '')
             .trim();
-          if(displayText.length % 20 === 0 || displayText.length < 50) {
+          const now = Date.now();
+          if(now - lastMarkdownTime > 500) {
             msgDiv.innerHTML = renderMarkdown(displayText);
+            lastMarkdownTime = now;
           } else {
             msgDiv.textContent = displayText;
           }
         }
-      } catch(e) {}
+        scrollBottom();
+        rafPending = false;
+      });
     }
-    scrollBottom();
   }
 
   // 处理记忆指令

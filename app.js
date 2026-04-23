@@ -1303,7 +1303,68 @@ async function requestNotificationPermission() {
   return false;
 }
 
-// 首次加载时请求权限（用户授权后才能收到推送）
-setTimeout(() => {
-  requestNotificationPermission();
-}, 3000); // 3秒后弹窗（不要太突兀）
+// ===== 获取推送订阅token并发送给Worker =====
+async function subscribePush() {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    
+    // 获取推送订阅
+    let sub = await reg.pushManager.getSubscription();
+    
+    if (!sub) {
+      // 如果没有订阅，创建新订阅
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array('BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LQ')
+      });
+    }
+    
+    console.log('[Push] Subscription:', sub);
+    
+    // 发送token到Worker
+    const endpoint = sub.endpoint;
+    const p256dh = arrayBufferToBase64(sub.getKey('p256dh'));
+    const auth = arrayBufferToBase64(sub.getKey('auth'));
+    
+    await fetch(`${config.memUrl}/push/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${config.memToken}`
+      },
+      body: JSON.stringify({ endpoint, p256dh, auth })
+    });
+    
+    console.log('[Push] Token saved to Worker');
+  } catch (e) {
+    console.error('[Push] Subscribe failed:', e);
+  }
+}
+
+// 辅助函数
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return window.btoa(binary);
+}
+
+// 授权成功后获取token
+requestNotificationPermission().then(granted => {
+  if (granted) {
+    setTimeout(subscribePush, 1000);
+  }
+});

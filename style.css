@@ -687,3 +687,57 @@ body {
   box-sizing: border-box !important;
   resize: vertical !important;
 }
+.preset-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.preset-item {
+  background: #fef9f0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #f0e8dc;
+}
+
+.preset-item.active {
+  background: #fff4e6;
+  border-color: var(--o);
+}
+
+.preset-name {
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  flex: 1;
+}
+
+.preset-info {
+  font-size: 11px;
+  color: #999;
+  margin-left: 8px;
+}
+
+.preset-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preset-actions button {
+  padding: 4px 10px;
+  border: none;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.preset-actions button:hover {
+  background: #f5f5f5;
+}

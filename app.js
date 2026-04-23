@@ -1274,3 +1274,36 @@ function renderPresets() {
     `;
   }).join('');
 }
+
+// ===== Service Worker注册（推送通知） =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js')
+    .then(reg => console.log('[SW] Registered:', reg))
+    .catch(err => console.error('[SW] Registration failed:', err));
+}
+
+// ===== 请求通知权限 =====
+async function requestNotificationPermission() {
+  if (!('Notification' in window)) {
+    console.log('[Notification] Not supported');
+    return false;
+  }
+  
+  if (Notification.permission === 'granted') {
+    console.log('[Notification] Already granted');
+    return true;
+  }
+  
+  if (Notification.permission !== 'denied') {
+    const permission = await Notification.requestPermission();
+    console.log('[Notification] Permission:', permission);
+    return permission === 'granted';
+  }
+  
+  return false;
+}
+
+// 首次加载时请求权限（用户授权后才能收到推送）
+setTimeout(() => {
+  requestNotificationPermission();
+}, 3000); // 3秒后弹窗（不要太突兀）

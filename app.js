@@ -100,9 +100,14 @@ function switchPage(id, el) {
 }
 
 // ===== 设置 =====
-function showSettings() { document.getElementById('settingsModal').classList.add('show'); }
-function closeAll() { document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show')); }
+function showSettings() { 
+  document.getElementById('settingsModal').classList.add('show');
+  renderPresets(); 
+}
 
+function closeAll() { 
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('show')); 
+}
 function saveSettings() {
   config = {
     apiUrl: document.getElementById('apiUrl').value.trim(),
@@ -1184,4 +1189,88 @@ async function importData(e) {
   }
   alert('无法识别的文件格式');
   e.target.value = '';
+}
+
+// ===== 预设管理 =====
+let presets = JSON.parse(localStorage.getItem('989812_presets') || '[]');
+let currentPreset = localStorage.getItem('989812_currentPreset') || '';
+
+function savePreset() {
+  const name = document.getElementById('presetName').value.trim();
+  if (!name) {
+    alert('请输入预设名称');
+    return;
+  }
+  
+  const preset = {
+    name: name,
+    apiUrl: config.apiUrl,
+    apiKey: config.apiKey,
+    model: config.model
+  };
+  
+  const idx = presets.findIndex(p => p.name === name);
+  if (idx >= 0) {
+    if (!confirm(`预设"${name}"已存在，是否覆盖？`)) return;
+    presets[idx] = preset;
+  } else {
+    presets.push(preset);
+  }
+  
+  localStorage.setItem('989812_presets', JSON.stringify(presets));
+  document.getElementById('presetName').value = '';
+  renderPresets();
+  alert('预设已保存 ✓');
+}
+
+function loadPreset(name) {
+  const preset = presets.find(p => p.name === name);
+  if (!preset) return;
+  
+  document.getElementById('apiUrl').value = preset.apiUrl;
+  document.getElementById('apiKey').value = preset.apiKey;
+  document.getElementById('model').value = preset.model;
+  
+  config.apiUrl = preset.apiUrl;
+  config.apiKey = preset.apiKey;
+  config.model = preset.model;
+  localStorage.setItem('989812_config', JSON.stringify(config));
+  
+  currentPreset = name;
+  localStorage.setItem('989812_currentPreset', name);
+  renderPresets();
+}
+
+function deletePreset(name) {
+  if (!confirm(`确定删除预设"${name}"？`)) return;
+  presets = presets.filter(p => p.name !== name);
+  localStorage.setItem('989812_presets', JSON.stringify(presets));
+  if (currentPreset === name) {
+    currentPreset = '';
+    localStorage.removeItem('989812_currentPreset');
+  }
+  renderPresets();
+}
+
+function renderPresets() {
+  const el = document.getElementById('presetList');
+  if (!presets.length) {
+    el.innerHTML = '<div style="color:#999;font-size:12px">还没有保存的预设</div>';
+    return;
+  }
+  
+  el.innerHTML = presets.map(p => {
+    const isActive = p.name === currentPreset;
+    const modelShort = p.model.length > 20 ? p.model.slice(0, 20) + '...' : p.model;
+    return `
+      <div class="preset-item ${isActive ? 'active' : ''}">
+        <span class="preset-name" onclick="loadPreset('${escHtml(p.name)}')">${escHtml(p.name)}</span>
+        <span class="preset-info">${escHtml(modelShort)}</span>
+        <div class="preset-actions">
+          <button onclick="loadPreset('${escHtml(p.name)}')">📌 使用</button>
+          <button onclick="deletePreset('${escHtml(p.name)}')">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join('');
 }

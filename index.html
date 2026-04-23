@@ -111,6 +111,16 @@
     <label>模型名称</label>
     <input id="model" value="claude-opus-4-20250514">
 
+    <!-- 预设管理 -->
+<div class="sg" style="margin-top:16px">
+  <h3>🔖 API预设</h3>
+  <div class="preset-controls">
+    <input id="presetName" placeholder="预设名称（如：小八四毛、恋恋官转）" style="flex:1">
+    <button onclick="savePreset()" style="padding:8px 16px;background:var(--o);color:white;border:none;border-radius:8px;cursor:pointer">💾 保存</button>
+  </div>
+  <div id="presetList" style="margin-top:12px"></div>
+</div>
+    
     <div class="sg">
       <h3>🎛️ 模型参数</h3>
       <div class="sr">

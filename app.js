@@ -733,7 +733,7 @@ async function send() {
     localStorage.setItem('989812_history', JSON.stringify(chatHistory));
   }
   removeImage();
-  alert('发送前检查：imageData=' + (messages[messages.length-1].imageData ? '有' : '无'));
+  
   // 自动清理聊天记录（保留最近200条，防止localStorage爆满）
   if (chatHistory.length > 200) {
     chatHistory = chatHistory.slice(-200);

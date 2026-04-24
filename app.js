@@ -364,12 +364,11 @@ function menuCopy() {
 function menuEdit() {
   if(menuTargetIdx < 0) return;
   const idx = menuTargetIdx;
-  const m = chatHistory[idx];
   closeMsgMenu();
   
   editingIndex = idx;
   const textarea = document.getElementById('editTextarea');
-  textarea.value = m.content || '';
+  textarea.value = chatHistory[idx].content || '';
   document.getElementById('editOverlay').classList.add('show');
   
   setTimeout(() => {
@@ -377,6 +376,23 @@ function menuEdit() {
     textarea.style.height = 'auto';
     textarea.style.height = Math.min(textarea.scrollHeight, window.innerHeight * 0.6) + 'px';
   }, 100);
+}
+
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('show');
+  editingIndex = -1;
+}
+
+function saveEdit() {
+  if (editingIndex < 0) return;
+  const newText = document.getElementById('editTextarea').value.trim();
+  if (!newText) return;
+  
+  chatHistory[editingIndex].content = newText;
+  messages[editingIndex].content = newText;
+  localStorage.setItem('989812_history', JSON.stringify(chatHistory));
+  refreshChat();
+  closeEdit();
 }
   
   // 创建编辑界面

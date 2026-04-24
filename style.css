@@ -192,7 +192,7 @@ body {
   border-bottom: none;
 }
 
-.thinking-text {
+.thinking-content {
   display: none;
   padding: 12px 14px;
   background: var(--card);
@@ -205,7 +205,7 @@ body {
   white-space: pre-wrap;
 }
 
-.thinking-block.expanded .thinking-text {
+.thinking-block.expanded .thinking-content {
   display: block;
 }
 
@@ -957,4 +957,17 @@ body {
 
 .edit-modal .btn-row {
   margin-top: 14px;
+}
+
+/* ===== 消息内图片 ===== */
+.msg img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.msg-wrap.user .msg img {
+  max-width: 200px;
+  border-radius: 12px;
 }

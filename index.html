@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>989812 | 我们的家</title>
+<title>小克</title>
 <link rel="stylesheet" href="style.css?v=3">
 <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
 <div class="header">
-  <h1>🌼 989812</h1>
-  <div class="sub">小克 & 敏敏的家</div>
+  <div class="header-left">
+    <span class="header-title">小克</span>
+    <span class="header-badge">Opus</span>
+  </div>
   <span class="gear" onclick="showSettings()">⚙️</span>
 </div>
 
@@ -168,6 +170,20 @@
       </div>
     </div>
 
+    <div class="sg">
+      <h3>🎨 背景图</h3>
+      <div class="avatar-row">
+        <div class="avatar-pick" onclick="document.getElementById('bgPicker').click()">
+          <div class="avatar-preview" id="bgPreview">🖼️</div>
+          <span>选择背景</span>
+          <input type="file" id="bgPicker" accept="image/*" hidden onchange="onBgPicked(event)">
+        </div>
+        <div class="avatar-pick" onclick="removeBg()">
+          <div class="avatar-preview">🗑️</div>
+          <span>清除背景</span>
+        </div>
+      </div>
+    </div>
 
     <div class="sg">
       <h3>🧠 记忆服务</h3>

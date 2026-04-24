@@ -1303,7 +1303,11 @@ async function loadPendingMessages() {
         const content = `**【${timeAgo}小克醒来找你】**\n\n${msg.content}`;
         
         appendMessage('assistant', content);
-        
+        // 给keepalive消息加特殊样式
+        const allBotMsgs = document.querySelectorAll('.msg.bot, .message.bot, .assistant');
+        if (allBotMsgs.length > 0) {
+          allBotMsgs[allBotMsgs.length - 1].classList.add('keepalive-msg');
+        }
         // 标记为已读
         await fetch(`${config.memUrl}/messages/consume/${msg.timestamp}`, {
           method: 'POST',

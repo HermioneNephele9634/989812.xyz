@@ -10,6 +10,7 @@ let currentMood = '';
 let pendingImage = null;
 let menuTargetIdx = -1;
 let isStreaming = false;
+let editingIndex = -1;
 
 // ===== 标签页小心思 =====
 const tabThoughts = [
@@ -362,9 +363,21 @@ function menuCopy() {
 }
 function menuEdit() {
   if(menuTargetIdx < 0) return;
-  const m = chatHistory[menuTargetIdx];
   const idx = menuTargetIdx;
+  const m = chatHistory[idx];
   closeMsgMenu();
+  
+  editingIndex = idx;
+  const textarea = document.getElementById('editTextarea');
+  textarea.value = m.content || '';
+  document.getElementById('editOverlay').classList.add('show');
+  
+  setTimeout(() => {
+    textarea.focus();
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, window.innerHeight * 0.6) + 'px';
+  }, 100);
+}
   
   // 创建编辑界面
   const overlay = document.createElement('div');
@@ -407,6 +420,24 @@ function menuEdit() {
   document.body.appendChild(overlay);
   ta.focus();
 }
+
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('show');
+  editingIndex = -1;
+}
+
+function saveEdit() {
+  if (editingIndex < 0) return;
+  const newText = document.getElementById('editTextarea').value.trim();
+  if (!newText) return;
+  
+  chatHistory[editingIndex].content = newText;
+  messages[editingIndex].content = newText;
+  localStorage.setItem('989812_history', JSON.stringify(chatHistory));
+  refreshChat();
+  closeEdit();
+}
+
 function menuRegen() {
   if(menuTargetIdx < 0) return;
   const idx = menuTargetIdx; closeMsgMenu();

@@ -1,4 +1,4 @@
-// ===== 989812 v3 - 小克 & 敏敏的家 =====
+// ===== 989812 v4 - 小克 & 敏敏的家 =====
 
 // ===== 状态变量 =====
 let messages = [];
@@ -384,9 +384,15 @@ function closeEdit() {
 }
 
 function saveEdit() {
-  if (editingIndex < 0) return;
-  const newText = document.getElementById('editTextarea').value.trim();
-  if (!newText) return;
+    if (editingIndex < 0) return;
+    const newText = document.getElementById('editTextarea').value.trim();
+    if (!newText) return;
+    chatHistory[editingIndex].content = newText;
+    messages[editingIndex].content = newText;
+    localStorage.setItem('989812_history', JSON.stringify(chatHistory));
+    refreshChat();
+    closeEdit();
+}
 
 function menuRegen() {
   if(menuTargetIdx < 0) return;

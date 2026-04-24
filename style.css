@@ -4,7 +4,7 @@
   --bg-chat: #faf6f1;
   --text: #3d3029;
   --text-light: #8a7d74;
-  --user-bubble:#4a3728;
+  --user-bubble:#e36b37;
   --user-text: #fff;
   --bot-text: #3d3029;
   --accent: #e36b37;
@@ -111,7 +111,7 @@ body {
 /* ===== 消息气泡 ===== */
 .msg-wrap {
   display: flex;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   align-items: flex-start;
   gap: 10px;
 }

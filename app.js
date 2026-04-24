@@ -1315,7 +1315,7 @@ async function subscribePush() {
       // 如果没有订阅，创建新订阅
       sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array('BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LQ')
+        applicationServerKey: urlBase64ToUint8Array('BOIBUtw-UjQMxj9ApRMB3oPmpqQYmtDFe-HscnkRozENKmVg0ImhuoejI-BEXEUoyrm14avFP4aSd00Ie8yP2eg')
       });
     }
     

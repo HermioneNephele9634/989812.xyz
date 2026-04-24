@@ -820,14 +820,14 @@ body {
 }
 
 /* ===== Markdown渲染 ===== */
-.msg-wrap.bot. msg h1,
-.msg-wrap.bot. msg h2,
-.msg-wrap.bot. msg h3 {
+.msg-wrap.bot .msg h1,
+.msg-wrap.bot .msg h2,
+.msg-wrap.bot .msg h3 {
   margin: 12px 0 6px;
   color: var(--text);
 }
 
-.msg-wrap.bot. msg code {
+.msg-wrap.bot .msg code {
   background: rgba(227, 107, 55, 0.08);
   padding: 2px 6px;
   border-radius: 4px;
@@ -835,7 +835,7 @@ body {
   color: var(--accent);
 }
 
-.msg-wrap.bot. msg pre {
+.msg-wrap.bot .msg pre {
   background: #2d2017;
   color: #f0e6dc;
   padding: 12px;
@@ -845,34 +845,34 @@ body {
   font-size: 13px;
 }
 
-.msg-wrap.bot. msg pre code {
+.msg-wrap.bot .msg pre code {
   background: none;
   color: inherit;
   padding: 0;
 }
 
-.msg-wrap.bot. msg ul,
-.msg-wrap.bot. msg ol {
+.msg-wrap.bot .msg ul,
+.msg-wrap.bot .msg ol {
   padding-left: 20px;
   margin: 6px 0;
 }
 
-.msg-wrap.bot. msg li {
+.msg-wrap.bot .msg li {
   margin-bottom: 4px;
 }
 
-.msg-wrap.bot. msg hr {
+.msg-wrap.bot .msg hr {
   border: none;
   border-top: 1px solid var(--border);
   margin: 12px 0;
 }
 
-.msg-wrap.bot. msg strong {
+.msg-wrap.bot .msg strong {
   color: var(--text);
   font-weight: 600;
 }
 
-.msg-wrap.bot. msg a {
+.msg-wrap.bot .msg a {
   color: var(--accent);
   text-decoration: none;
 }

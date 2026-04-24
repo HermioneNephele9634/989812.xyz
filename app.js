@@ -704,6 +704,13 @@ async function send() {
   if(!config.apiUrl || !config.apiKey) { showSettings(); return; }
 
   document.getElementById('welcome').style.display = 'none';
+  // 更新最后聊天时间（keepalive用）
+  if(config.memUrl && config.memToken) {
+    fetch(`${config.memUrl}/chat/ping`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${config.memToken}` }
+    }).catch(() => {});
+  }
   input.value = '';
   input.style.height = '42px';
 

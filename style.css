@@ -107,81 +107,73 @@ body {
   line-height: 1.8;
 }
 
+：
 /* ===== 消息气泡 ===== */
-.msg {
+.msg-wrap {
   display: flex;
   margin-bottom: 16px;
   align-items: flex-start;
   gap: 10px;
 }
 
-.msg.user {
+.msg-wrap.user {
   flex-direction: row-reverse;
 }
 
-.msg .avatar {
+.msg-wrap .avatar {
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   border-radius: 50%;
   flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  overflow: hidden;
-}
-
-.msg .avatar img {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
+  margin-top: 2px;
 }
 
-.msg.user .avatar {
-  background: var(--accent);
-  color: white;
-}
-
-.msg.bot .avatar {
-  background: rgba(227, 107, 55, 0.12);
-  color: var(--accent);
-}
-
-.msg .bubble {
+.msg-content-wrap {
   max-width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-wrap.user .msg {
+  background: var(--user-bubble);
+  color: var(--user-text);
+  padding: 12px 16px;
+  border-radius: 20px 20px 4px 20px;
   line-height: 1.7;
   font-size: 15px;
   word-break: break-word;
 }
 
-.msg.user .bubble {
-  background: var(--user-bubble);
-  color: var(--user-text);
-  padding: 12px 16px;
-  border-radius: 20px 20px 4px 20px;
-}
-
-.msg.bot .bubble {
+.msg-wrap.bot .msg {
   background: transparent;
   color: var(--bot-text);
   padding: 4px 0;
+  line-height: 1.7;
+  font-size: 15px;
+  word-break: break-word;
 }
 
-.msg.bot .bubble p {
+.msg-wrap.bot .msg p {
   margin-bottom: 8px;
 }
 
-.msg.bot .bubble p:last-child {
+.msg-wrap.bot .msg p:last-child {
   margin-bottom: 0;
 }
 
 /* ===== 思维链折叠 ===== */
-.think-toggle {
+.thinking-block {
+  margin-bottom: 8px;
+}
+
+.thinking-header {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  margin-bottom: 12px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -191,25 +183,18 @@ body {
   transition: all 0.2s;
 }
 
-.think-toggle::before {
-  content: '🕐';
-  font-size: 14px;
-}
-
-.think-toggle:hover {
+.thinking-header:hover {
   background: rgba(227, 107, 55, 0.05);
 }
 
-.think-toggle.open {
+.thinking-block.expanded .thinking-header {
   border-radius: 12px 12px 0 0;
   border-bottom: none;
 }
 
-.think-content {
+.thinking-text {
   display: none;
   padding: 12px 14px;
-  margin-bottom: 12px;
-  margin-top: -12px;
   background: var(--card);
   border: 1px solid var(--border);
   border-top: none;
@@ -217,9 +202,10 @@ body {
   font-size: 13px;
   color: var(--text-light);
   line-height: 1.7;
+  white-space: pre-wrap;
 }
 
-.think-content.show {
+.thinking-block.expanded .thinking-text {
   display: block;
 }
 
@@ -834,14 +820,14 @@ body {
 }
 
 /* ===== Markdown渲染 ===== */
-.msg.bot .bubble h1,
-.msg.bot .bubble h2,
-.msg.bot .bubble h3 {
+.msg-wrap.bot.msg h1,
+.msg-wrap.bot.msg h2,
+.msg-wrap.bot.msg h3 {
   margin: 12px 0 6px;
   color: var(--text);
 }
 
-.msg.bot .bubble code {
+.msg-wrap.bot.msg code {
   background: rgba(227, 107, 55, 0.08);
   padding: 2px 6px;
   border-radius: 4px;
@@ -849,7 +835,7 @@ body {
   color: var(--accent);
 }
 
-.msg.bot .bubble pre {
+.msg-wrap.bot.msg pre {
   background: #2d2017;
   color: #f0e6dc;
   padding: 12px;
@@ -859,34 +845,34 @@ body {
   font-size: 13px;
 }
 
-.msg.bot .bubble pre code {
+.msg-wrap.bot.msg pre code {
   background: none;
   color: inherit;
   padding: 0;
 }
 
-.msg.bot .bubble ul,
-.msg.bot .bubble ol {
+.msg-wrap.bot.msg ul,
+.msg-wrap.bot.msg ol {
   padding-left: 20px;
   margin: 6px 0;
 }
 
-.msg.bot .bubble li {
+.msg-wrap.bot.msg li {
   margin-bottom: 4px;
 }
 
-.msg.bot .bubble hr {
+.msg-wrap.bot.msg hr {
   border: none;
   border-top: 1px solid var(--border);
   margin: 12px 0;
 }
 
-.msg.bot .bubble strong {
+.msg-wrap.bot.msg strong {
   color: var(--text);
   font-weight: 600;
 }
 
-.msg.bot .bubble a {
+.msg-wrap.bot.msg a {
   color: var(--accent);
   text-decoration: none;
 }

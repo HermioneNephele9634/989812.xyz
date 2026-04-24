@@ -103,6 +103,18 @@
   <div class="msg-menu-item" id="menuRegenItem" onclick="menuRegen()">🔄 重新生成</div>
 </div>
 
+  <!-- 编辑消息弹窗 -->
+<div class="edit-overlay" id="editOverlay" onclick="if(event.target===this)closeEdit()">
+  <div class="edit-modal">
+    <h3>✏️ 编辑消息</h3>
+    <textarea id="editTextarea"></textarea>
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeEdit()">取消</button>
+      <button class="btn-save" onclick="saveEdit()">保存</button>
+    </div>
+  </div>
+</div>
+  
 <!-- 设置弹窗 -->
 <div class="overlay" id="settingsModal">
   <div class="modal">

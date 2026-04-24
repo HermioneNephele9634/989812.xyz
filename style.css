@@ -971,3 +971,49 @@ body {
   max-width: 200px;
   border-radius: 12px;
 }
+
+/* ===== 布局修复 ===== */
+.msg-wrap {
+  display: flex !important;
+  margin-bottom: 24px !important;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.msg-wrap.user {
+  flex-direction: row-reverse !important;
+}
+
+.msg-wrap.user .msg-content-wrap {
+  align-items: flex-end;
+}
+
+.msg-wrap.user .msg {
+  background: var(--user-bubble) !important;
+  color: var(--user-text) !important;
+  padding: 12px 16px !important;
+  border-radius: 20px 20px 4px 20px !important;
+}
+
+.msg-wrap.bot .msg {
+  background: transparent !important;
+  color: var(--bot-text) !important;
+  padding: 4px 0 !important;
+}
+
+.msg-content-wrap {
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 时间标签 */
+.msg-time {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-bottom: 4px;
+}
+
+.msg-wrap.user .msg-time {
+  text-align: right;
+}

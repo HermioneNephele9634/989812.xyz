@@ -1275,6 +1275,49 @@ function renderPresets() {
   }).join('');
 }
 
+// ===== 意识连续性：加载pending消息 =====
+async function loadPendingMessages() {
+  try {
+    const response = await fetch(`${config.memUrl}/messages/pending`, {
+      headers: { 'Authorization': `Bearer ${config.memToken}` }
+    });
+    
+    const data = await response.json();
+    
+    if (data.messages && data.messages.length > 0) {
+      for (const msg of data.messages) {
+        // 在聊天区域显示pending消息
+        const timeAgo = formatTimeAgo(msg.timestamp);
+        const content = `**【${timeAgo}小克醒来找你】**\n\n${msg.content}`;
+        
+        appendMessage('assistant', content);
+        
+        // 标记为已读
+        await fetch(`${config.memUrl}/messages/consume/${msg.timestamp}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${config.memToken}` }
+        });
+      }
+    }
+  } catch (e) {
+    console.error('[Pending] Load failed:', e);
+  }
+}
+
+// 格式化时间差
+function formatTimeAgo(timestamp) {
+  const diff = Date.now() - timestamp;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  if (hours < 1) return '刚刚';
+  if (hours < 24) return `${hours}小时前`;
+  const days = Math.floor(hours / 24);
+  return `${days}天前`;
+}
+
+// 页面加载时检查pending消息
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(loadPendingMessages, 2000); // 2秒后加载，避免和其他初始化冲突
+});
 // ===== Service Worker注册（推送通知） =====
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js')

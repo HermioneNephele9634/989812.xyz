@@ -1,4 +1,4 @@
-// ===== 989812 v4 - 小克 & 敏敏的家 =====
+// ===== 989812 v5 - 小克 & 敏敏的家 =====
 
 // ===== 状态变量 =====
 let messages = [];
@@ -1317,7 +1317,7 @@ function formatTimeAgo(timestamp) {
   return `${days}天前`;
 }
 
-// 页面加载时检查pending消息
+// 页面加载时检查pending消息（暂停：appendMessage未定义）
 document.addEventListener('DOMContentLoaded', function() {
   setTimeout(loadPendingMessages, 2000); // 2秒后加载，避免和其他初始化冲突
 });

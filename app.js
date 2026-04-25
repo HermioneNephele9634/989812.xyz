@@ -65,6 +65,7 @@ if(config.botAvatar) {
     chatHistory.forEach((m,i) => renderMsg(m, i, false));
     messages = chatHistory.map(m => ({role: m.role, content: m.content}));
   }
+  applyBg();
 
   document.getElementById('input').addEventListener('keydown', function(e) {
     if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
@@ -1424,3 +1425,48 @@ requestNotificationPermission().then(granted => {
     setTimeout(subscribePush, 1000);
   }
 });
+
+// ===== 背景图 =====
+function onBgPicked(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    localStorage.setItem('989812_bg', dataUrl);
+    applyBg();
+    // 更新预览
+    const preview = document.getElementById('bgPreview');
+    if (preview) preview.innerHTML = '<img src="' + dataUrl + '">';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeBg() {
+  localStorage.removeItem('989812_bg');
+  const chat = document.getElementById('chat');
+  chat.style.backgroundImage = 'none';
+  const preview = document.getElementById('bgPreview');
+  if (preview) preview.innerHTML = '🖼️';
+}
+
+function applyBg() {
+  const bg = localStorage.getItem('989812_bg');
+  if (bg) {
+    const chat = document.getElementById('chat');
+    chat.style.backgroundImage = 'url(' + bg + ')';
+    chat.style.backgroundSize = 'cover';
+    chat.style.backgroundPosition = 'center';
+    chat.style.backgroundRepeat = 'no-repeat';
+  }
+}
+
+// ===== 清除头像 =====
+function clearAvatars() {
+  config.userAvatar = '';
+  config.botAvatar = '';
+  localStorage.setItem('989812_config', JSON.stringify(config));
+  document.getElementById('userAvatarPreview').innerHTML = '👩';
+  document.getElementById('botAvatarPreview').innerHTML = '🌼';
+  refreshChat();
+}

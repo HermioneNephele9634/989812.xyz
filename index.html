@@ -171,6 +171,10 @@
       <div class="avatar-row">
         <div class="avatar-pick" onclick="document.getElementById('userAvatarPicker').click()">
           <div class="avatar-preview" id="userAvatarPreview">👩</div>
+            <div class="avatar-pick" onclick="clearAvatars()">
+          <div class="avatar-preview">🗑️</div>
+          <span>清除头像</span>
+        </div>
           <span>敏敏</span>
           <input type="file" id="userAvatarPicker" accept="image/*" hidden onchange="onAvatarPicked(event,'user')">
         </div>

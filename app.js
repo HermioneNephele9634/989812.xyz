@@ -1,4 +1,4 @@
-// ===== 989812 v9 - 小克 & 敏敏的家 =====
+// ===== 989812 v10 - 小克 & 敏敏的家 =====
 
 // ===== 状态变量 =====
 let messages = [];
@@ -683,8 +683,6 @@ function buildRequestBody(msgs) {
   }
   return body;
 }
-
-：
 
 // ===== 发送消息入口 =====
 async function send() {

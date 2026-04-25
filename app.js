@@ -1285,7 +1285,7 @@ function renderPresets() {
   }).join('');
 }
 
-// ===== 意识连续性：加载pending消息 =====
+// ===== 时间格式差异化 =====
 function formatTimeAgo(timestamp) {
   const diff = Date.now() - timestamp;
   const mins = Math.floor(diff / 60000);
@@ -1296,6 +1296,7 @@ function formatTimeAgo(timestamp) {
   return `${days}天前`;
 }
 
+// ===== 意识连续性：加载pending消息 =====
 async function loadPendingMessages() {
   try {
     const response = await fetch(`${config.memUrl}/messages/pending`, {

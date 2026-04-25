@@ -1125,3 +1125,11 @@ body {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* ===== 时间标签 ===== */
+.msg-time {
+  font-size: 11px !important;
+  color: var(--text-light) !important;
+  font-weight: 400;
+  margin-bottom: 2px;
+}

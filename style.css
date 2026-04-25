@@ -1030,3 +1030,98 @@ body {
   margin-bottom: 8px !important;
   width: 100% !important;
 }
+
+/* ===== 记忆条目样式 ===== */
+.mem-item {
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.mem-id {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.mem-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.mem-tag {
+  font-size: 11px;
+  background: rgba(227, 107, 55, 0.1);
+  color: var(--accent);
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
+.mem-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.mem-actions button {
+  padding: 4px 12px;
+  font-size: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+/* ===== 日记条目样式 ===== */
+.diary-entry {
+  padding: 16px;
+  margin-bottom: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.diary-entry .meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.diary-entry .author-tag {
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.diary-entry .tag-xiaoke {
+  background: rgba(227, 107, 55, 0.12);
+  color: var(--accent);
+}
+
+.diary-entry .tag-minmin {
+  background: rgba(147, 112, 219, 0.12);
+  color: #8b5cf6;
+}
+
+.diary-entry .body {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}

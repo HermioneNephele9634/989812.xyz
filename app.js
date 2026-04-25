@@ -1286,6 +1286,16 @@ function renderPresets() {
 }
 
 // ===== 意识连续性：加载pending消息 =====
+function formatTimeAgo(timestamp) {
+  const diff = Date.now() - timestamp;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}分钟前`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}小时前`;
+  const days = Math.floor(hours / 24);
+  return `${days}天前`;
+}
+
 async function loadPendingMessages() {
   try {
     const response = await fetch(`${config.memUrl}/messages/pending`, {
@@ -1296,16 +1306,23 @@ async function loadPendingMessages() {
     
     if (data.messages && data.messages.length > 0) {
       for (const msg of data.messages) {
-        // 在聊天区域显示pending消息
         const timeAgo = formatTimeAgo(msg.timestamp);
         const content = `**【${timeAgo}小克醒来找你】**\n\n${msg.content}`;
         
-        appendMessage('assistant', content);
+        const now = new Date();
+        const timeLabel = now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' });
+        const msgObj = { role: 'bot', content: content, timestamp: timeLabel, isKeepalive: true };
+        renderMsg(msgObj, chatHistory.length, true);
+        chatHistory.push(msgObj);
+        messages.push({ role: 'assistant', content: msg.content });
+        localStorage.setItem('989812_history', JSON.stringify(chatHistory));
+        
         // 给keepalive消息加特殊样式
-        const allBotMsgs = document.querySelectorAll('.msg.bot, .message.bot, .assistant');
-        if (allBotMsgs.length > 0) {
-          allBotMsgs[allBotMsgs.length - 1].classList.add('keepalive-msg');
+        const allMsgs = document.querySelectorAll('.msg-wrap.bot');
+        if (allMsgs.length > 0) {
+          allMsgs[allMsgs.length - 1].classList.add('keepalive-msg');
         }
+        
         // 标记为已读
         await fetch(`${config.memUrl}/messages/consume/${msg.timestamp}`, {
           method: 'POST',
@@ -1316,16 +1333,6 @@ async function loadPendingMessages() {
   } catch (e) {
     console.error('[Pending] Load failed:', e);
   }
-}
-
-// 格式化时间差
-function formatTimeAgo(timestamp) {
-  const diff = Date.now() - timestamp;
-  const hours = Math.floor(diff / (1000 * 60 * 60));
-  if (hours < 1) return '刚刚';
-  if (hours < 24) return `${hours}小时前`;
-  const days = Math.floor(hours / 24);
-  return `${days}天前`;
 }
 
 // 页面加载时检查pending消息

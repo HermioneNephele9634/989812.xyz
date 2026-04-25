@@ -683,6 +683,9 @@ function buildRequestBody(msgs) {
   }
   return body;
 }
+
+：
+
 // ===== 发送消息入口 =====
 async function send() {
   const input = document.getElementById('input');
@@ -690,14 +693,23 @@ async function send() {
   if(!text && !pendingImage) return;
   if(!config.apiUrl || !config.apiKey) { showSettings(); return; }
 
-  document.getElementById('welcome').style.display = 'none';
-  // 更新最后聊天时间（keepalive用）
+  // 更新最后聊天时间+API配置（keepalive用）
   if(config.memUrl && config.memToken) {
     fetch(`${config.memUrl}/chat/ping`, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${config.memToken}` }
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${config.memToken}` 
+      },
+      body: JSON.stringify({
+        apiUrl: config.apiUrl,
+        apiKey: config.apiKey,
+        model: config.model
+      })
     }).catch(() => {});
   }
+
+  document.getElementById('welcome').style.display = 'none';
   input.value = '';
   input.style.height = '42px';
 

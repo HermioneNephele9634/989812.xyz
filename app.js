@@ -548,6 +548,8 @@ async function processMemoryCommands(text) {
   }
 
   if(creates.length || edits.length || dels.length) await loadMemories();
+  return clean;
+}
 
   // 悄悄话
   const whispers = [...text.matchAll(/\[WHISPER\]([\s\S]*?)\[\/WHISPER\]/g)];

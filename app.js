@@ -512,6 +512,15 @@ function buildSystemPrompt() {
     sys += '核心记忆需谨慎操作，不可轻易删除。请主动记录重要信息。\n';
   }
 
+  // 日记注入（最近5条）
+  if(diaryCache.length > 0) {
+    sys += '\n\n## Diary\n<diary>\n';
+    diaryCache.forEach(e => {
+      sys += `<entry>\n<date>${e.date}</date>\n<author>${e.author}</author>\n<mood>${e.mood || ''}</mood>\n<content>${e.content}</content>\n</entry>\n`;
+    });
+    sys += '</diary>\n';
+  }
+  
   // 工具说明
   sys += '\n\n## Tools\n';
   sys += '你有以下工具可用：\n';

@@ -755,11 +755,11 @@ async function doSend() {
   isStreaming = true;
   if(config.memUrl && config.memToken) {
     try { await loadMemories(); } catch(e) {}
-  }
     try {
       const d = await memFetch('/diary');
       diaryCache = (d.entries || []).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5);
     } catch(e) { diaryCache = []; }
+  }
   const chat = document.getElementById('chat');
   const typing = document.createElement('div');
   typing.className = 'typing';

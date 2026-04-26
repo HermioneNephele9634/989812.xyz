@@ -1332,7 +1332,7 @@ async function loadPendingMessages() {
         const msgObj = { role: 'bot', content: content, timestamp: timeLabel, isKeepalive: true };
         renderMsg(msgObj, chatHistory.length, true);
         chatHistory.push(msgObj);
-        messages.push({ role: 'assistant', content: msg.content });
+        messages.push({ role: 'assistant', content: `[⏰ keepalive自动醒来记录 - ${timeAgo}] 你给敏敏发了消息："${msg.content}"` });
         localStorage.setItem('989812_history', JSON.stringify(chatHistory));
         
         // 给keepalive消息加特殊样式

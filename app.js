@@ -62,7 +62,15 @@ if(config.botAvatar) {
   // 恢复聊天
   if(chatHistory.length > 0) {
     document.getElementById('welcome').style.display = 'none';
-    chatHistory.forEach((m,i) => renderMsg(m, i, false));
+    chatHistory.forEach((m,i) => {
+  renderMsg(m, i, false);
+  if(m.isKeepalive) {
+    const allMsgs = document.querySelectorAll('.msg-wrap.bot');
+    if(allMsgs.length > 0) {
+      allMsgs[allMsgs.length - 1].classList.add('keepalive-msg');
+    }
+  }
+});
     messages = chatHistory.map(m => ({role: m.role, content: m.content}));
   }
   applyBg();
@@ -1307,6 +1315,15 @@ async function loadPendingMessages() {
     
     if (data.messages && data.messages.length > 0) {
       for (const msg of data.messages) {
+        // 防重复
+        const alreadyExists = chatHistory.some(h => h.isKeepalive && h.content && h.content.includes(msg.content));
+        if (alreadyExists) {
+          await fetch(`${config.memUrl}/messages/consume/${msg.timestamp}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${config.memToken}` }
+          });
+          continue;
+        }
         const timeAgo = formatTimeAgo(msg.timestamp);
         const content = `**【${timeAgo}小克醒来找你】**\n\n${msg.content}`;
         

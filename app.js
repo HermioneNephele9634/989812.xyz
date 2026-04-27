@@ -567,22 +567,7 @@ async function processMemoryCommands(text) {
 
   if(creates.length || edits.length || dels.length) await loadMemories();
 
-  // 社区指令
-  const communityMatches = [...text.matchAll(/\[COMMUNITY\]([\s\S]*?)\[\/COMMUNITY\]/g)];
-  for(const m of communityMatches) {
-    try {
-      const resp = await memFetch('/community', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: m[1].trim()
-      });
-      console.log('社区API返回:', resp);
-    } catch(e) {
-      console.log('社区API错误:', e);
-    }
-    clean = clean.replace(m[0], '');
-  }
-  
+
   // 悄悄话
   const whispers = [...text.matchAll(/\[WHISPER\]([\s\S]*?)\[\/WHISPER\]/g)];
   for(const m of whispers) {
@@ -675,6 +660,23 @@ async function processToolCommands(text) {
     }
   }
 
+  // 社区指令
+  const communityMatches = [...text.matchAll(/\[COMMUNITY\]([\s\S]*?)\[\/COMMUNITY\]/g)];
+  for(const m of communityMatches) {
+    try {
+      const resp = await fetch('https://memory-api.2120078483.workers.dev/community', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: m[1].trim()
+      });
+      const data = await resp.json();
+      toolResults.push('社区返回：' + JSON.stringify(data.result || data));
+      hasTools = true;
+    } catch(e) {
+      toolResults.push('社区错误：' + e.message);
+    }
+  }
+  
   // 清除指令标签
   let clean = text
     .replace(/\[TOOL_SEARCH\][\s\S]*?\[\/TOOL_SEARCH\]/g, '')

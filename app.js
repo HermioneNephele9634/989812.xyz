@@ -679,6 +679,7 @@ async function processToolCommands(text) {
   let clean = text
     .replace(/\[TOOL_SEARCH\][\s\S]*?\[\/TOOL_SEARCH\]/g, '')
     .replace(/\[TOOL_FETCH\][\s\S]*?\[\/TOOL_FETCH\]/g, '')
+    .replace(/\[COMMUNITY\][\s\S]*?(\[\/COMMUNITY\]|$)/g, '')
     .trim();
 
   return { clean, hasTools, toolResults };
@@ -945,6 +946,8 @@ async function handleStream(body, typing) {
             .replace(/\[MEMORY_CREATE[^\]]*\][\s\S]*?(\[\/MEMORY_CREATE\]|$)/g, '')
             .replace(/\[MEMORY_EDIT[^\]]*\][\s\S]*?(\[\/MEMORY_EDIT\]|$)/g, '')
             .replace(/\[MEMORY_DELETE[^\]]*\][\s\S]*?(\[\/MEMORY_DELETE\]|$)/g, '')
+            .replace(/\[MEMORY_DELETE[^\]]*\][\s\S]*?(\[\/MEMORY_DELETE\]|$)/g, '')
+            .replace(/\[COMMUNITY\][\s\S]*?(\[\/COMMUNITY\]|$)/g, '')
             .trim();
           const now = Date.now();
           if(now - lastMarkdownTime > 500) {

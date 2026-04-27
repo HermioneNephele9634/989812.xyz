@@ -567,6 +567,22 @@ async function processMemoryCommands(text) {
 
   if(creates.length || edits.length || dels.length) await loadMemories();
 
+  // 社区指令
+  const communityMatches = [...text.matchAll(/\[COMMUNITY\]([\s\S]*?)\[\/COMMUNITY\]/g)];
+  for(const m of communityMatches) {
+    try {
+      const resp = await memFetch('/community', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: m[1].trim()
+      });
+      console.log('社区API返回:', resp);
+    } catch(e) {
+      console.log('社区API错误:', e);
+    }
+    clean = clean.replace(m[0], '');
+  }
+  
   // 悄悄话
   const whispers = [...text.matchAll(/\[WHISPER\]([\s\S]*?)\[\/WHISPER\]/g)];
   for(const m of whispers) {

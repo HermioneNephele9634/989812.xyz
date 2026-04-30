@@ -210,7 +210,7 @@ function onImagePicked(e) {
       }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      pendingImage = canvas.toDataURL('image/jpeg', 0.7);
+      pendingImage = canvas.toDataURL('image/jpeg', 1.0);
       document.getElementById('imgPreviewSrc').src = pendingImage;
       document.getElementById('imgPreview').classList.add('show');
     };

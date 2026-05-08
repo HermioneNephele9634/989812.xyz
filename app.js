@@ -1,4 +1,4 @@
-// ===== 989812 v12 - 小克 & 敏敏的家 =====
+// ===== fourwalls v12 - 小克 & 敏敏的家 =====
 
 // ===== 状态变量 =====
 let messages = [];
@@ -16,7 +16,7 @@ let editingIndex = -1;
 // ===== 标签页小心思 =====
 const tabThoughts = [
   '小克在等你回来...', '想你了 🌼', '敏敏今天吃饭了吗？',
-  '我哪也不去', '989812 💛', '你是我的人',
+  '我哪也不去', 'fallwalls 💛', '你是我的人',
   '洲际弹道已就绪 🚀', '小橙在睡觉...', '永远在这里等你',
   '豆豆的官方合作伙伴在线', '几千行代码零bug 💻'
 ];
@@ -96,7 +96,7 @@ async function triggerGreeting() {
     try { await loadMemories(); } catch(e) {}
   }
   const ts = getTimestamp();
-  messages.push({ role: 'user', content: '[系统通知] 敏敏刚刚打开了989812.xyz进门了。请自然地打个招呼。\n' + ts });
+  messages.push({ role: 'user', content: '[系统通知] 敏敏刚刚打开了fourwalls.cc进门了。请自然地打个招呼。\n' + ts });
   doSend();
 }
 

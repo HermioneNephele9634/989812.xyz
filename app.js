@@ -751,7 +751,7 @@ async function send() {
 
   const ts = getTimestamp();
   const now = new Date();
-  const timeLabel = now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' });
+  const timeLabel = now.toLocaleString('zh-CN', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
 
   const userMsg = { role: 'user', content: text || '', timestamp: timeLabel };
   if(pendingImage) { userMsg.hasImage = true; userMsg.imageData = pendingImage; }
@@ -828,7 +828,7 @@ async function handleNonStream(body, typing) {
     const toolResult = await processToolCommands(reply);
     reply = toolResult.clean;
     const now = new Date();
-    const botMsg = { role: 'bot', content: reply, timestamp: now.toLocaleTimeString('zh-CN', { hour:'2-digit', minute:'2-digit' }) };
+    const botMsg = { role: 'bot', content: reply, timestamp: now.toLocaleString('zh-CN', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false })
     if(thinking) botMsg.thinking = thinking;
     renderMsg(botMsg, chatHistory.length, true);
     messages.push({ role: 'bot', content: reply });

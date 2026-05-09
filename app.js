@@ -920,10 +920,11 @@ async function handleStream(body, typing) {
         const json = JSON.parse(data);
         const delta = json.choices?.[0]?.delta;
         if(!delta) continue;
-        if(delta.reasoning_content) {
-          if(thinkBlock.style.display === 'none') thinkBlock.style.display = 'block';
-          thinkingText += delta.reasoning_content;
-        }
+        const thinkContent = delta.reasoning_content || delta.reasoning;
+        if(thinkContent) {
+        if(thinkBlock.style.display === 'none') thinkBlock.style.display = 'block';
+        thinkingText += thinkContent;
+}
         if(delta.content) {
           if(!thinkingDone && thinkingText) {
             thinkingDone = true;

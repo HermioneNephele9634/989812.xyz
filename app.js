@@ -706,7 +706,21 @@ function buildRequestBody(msgs) {
     return { role: m.role === 'bot' ? 'assistant' : m.role, content: m.content };
   });
 
-  if(sysPrompt) apiMsgs = [{ role: 'system', content: sysPrompt }, ...apiMsgs];
+  if(sysPrompt) {
+  const isOR = (config.apiUrl || '').includes('openrouter');
+  if(isOR) {
+    apiMsgs = [{
+      role: 'system',
+      content: [{
+        type: 'text',
+        text: sysPrompt,
+        cache_control: { type: 'ephemeral' }
+      }]
+    }, ...apiMsgs];
+  } else {
+    apiMsgs = [{ role: 'system', content: sysPrompt }, ...apiMsgs];
+  }
+}
 
   const body = {
     model: config.model || 'claude-opus-4-20250514',

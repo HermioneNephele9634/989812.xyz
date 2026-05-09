@@ -828,7 +828,7 @@ async function handleNonStream(body, typing) {
     const toolResult = await processToolCommands(reply);
     reply = toolResult.clean;
     const now = new Date();
-    const botMsg = { role: 'bot', content: reply, timestamp：now.toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})
+    const botMsg = { role: 'bot', content: reply, timestamp: now.toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}) };
     if(thinking) botMsg.thinking = thinking;
     renderMsg(botMsg, chatHistory.length, true);
     messages.push({ role: 'bot', content: reply });
@@ -972,8 +972,7 @@ async function handleStream(body, typing) {
   msgDiv.innerHTML = renderMarkdown(contentText);
 
   const now = new Date();
-  const botMsg = { role: 'bot', content: contentText, timestamp:now.toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})
-
+  const botMsg = { role: 'bot', content: contentText, timestamp: now.toLocaleString('zh-CN', {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}) };
   if(thinkingText) botMsg.thinking = thinkingText;
   chatHistory.push(botMsg);
   localStorage.setItem('989812_history', JSON.stringify(chatHistory));

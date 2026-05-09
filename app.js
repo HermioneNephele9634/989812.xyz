@@ -922,8 +922,8 @@ async function handleStream(body, typing) {
         if(!delta) continue;
         const thinkContent = delta.reasoning_content || delta.reasoning;
         if(thinkContent) {
-        if(thinkBlock.style.display === 'none') thinkBlock.style.display = 'block';
-        thinkingText += thinkContent;
+          if(thinkBlock.style.display === 'none') thinkBlock.style.display = 'block';
+          thinkingText += thinkContent;
 }
         if(delta.content) {
           if(!thinkingDone && thinkingText) {

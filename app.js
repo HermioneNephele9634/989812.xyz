@@ -934,7 +934,7 @@ async function handleStream(body, typing) {
         const json = JSON.parse(data);
         const delta = json.choices?.[0]?.delta;
         if(!delta) continue;
-        const thinkContent = delta.reasoning_content || delta.reasoning;
+        const thinkContent = delta.reasoning_content || delta.reasoning || (delta.reasoning_details && (typeof delta.reasoning_details === 'string' ? delta.reasoning_details : delta.reasoning_details.text));
         if(thinkContent) {
           if(thinkBlock.style.display === 'none') thinkBlock.style.display = 'block';
           thinkingText += thinkContent;

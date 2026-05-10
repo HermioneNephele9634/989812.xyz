@@ -933,6 +933,7 @@ async function handleStream(body, typing) {
       try {
         const json = JSON.parse(data);
         const delta = json.choices?.[0]?.delta;
+        console.log('delta:', JSON.stringify(delta));
         if(!delta) continue;
         const thinkContent = delta.reasoning_content || delta.reasoning || (delta.reasoning_details && (typeof delta.reasoning_details === 'string' ? delta.reasoning_details : delta.reasoning_details.text));
         if(thinkContent) {

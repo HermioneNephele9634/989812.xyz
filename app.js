@@ -730,6 +730,10 @@ function buildRequestBody(msgs) {
     stream: config.streamToggle !== false
   };
   if(config.topP < 1) body.top_p = config.topP;
+  const isOR = (config.apiUrl || '').includes('openrouter');
+if(isOR) {
+  body.provider = { order: ["anthropic"] };
+}
   if(config.thinkBudget > 0) {
     body.thinking = { type: 'enabled', budget_tokens: config.thinkBudget };
   }
